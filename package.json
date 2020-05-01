@@ -1,0 +1,24 @@
+{
+  "name": "template-ts",
+  "version": "1.0.0",
+  "description": "TypeScript version of our Node.js template",
+  "main": "server.js",
+  "scripts": {
+    "test": "standard && nyc --reporter=lcov mocha tests/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smoke-trees/node-template-ts.git"
+  },
+  "keywords": [
+    "nodejs",
+    "template",
+    "typescript"
+  ],
+  "author": "SmokeTrees",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/smoke-trees/node-template-ts/issues"
+  },
+  "homepage": "https://github.com/smoke-trees/node-template-ts#readme"
+}
