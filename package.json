@@ -4,10 +4,10 @@
   "description": "TypeScript version of our Node.js template",
   "main": "dist/server.js",
   "scripts": {
-    "test": "standardx **/*.ts && tsc && nyc --reporter=lcov mocha dist/tests/*",
+    "test": "standardx **/*.ts && tsc && nyc mocha dist/tests/*",
     "start": "tsc && node dist/server.js",
     "lint": "standardx **/*.ts --fix",
-    "coverage": "tsc && nyc mocha dist/tests/*"
+    "coverage": "tsc && nyc --reporter=lcov mocha dist/tests/* && codecov"
   },
   "repository": {
     "type": "git",
