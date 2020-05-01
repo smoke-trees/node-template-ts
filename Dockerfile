@@ -20,5 +20,7 @@ COPY package* ./
 RUN npm install --production
 # Copy built artifacts
 COPY --from=builder /app/dist dist
+# Run in production mode
+ENV NODE_ENV=production
 # Start command
 CMD ["npm","start"]
