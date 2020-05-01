@@ -1,0 +1,11 @@
+.github
+.nyc_output
+coverage
+dist
+node_modules
+src/tests
+.eslintignore
+.eslintrc
+.git
+.gitignore
+.idea
