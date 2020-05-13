@@ -6,8 +6,7 @@
   "scripts": {
     "build": "npm run lint && tsc",
     "build-nolint": "tsc",
-    "pretest": "npm run build",
-    "test": "mocha dist/tests/*",
+    "test": "mocha -r ts-node/register src/tests/*",
     "dev": "nodemon --exec ts-node src/server.ts",
     "start": "node dist/server.js",
     "lint": "standardx **/*.ts --fix",
