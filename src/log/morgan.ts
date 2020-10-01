@@ -1,5 +1,5 @@
 import morgan from 'morgan'
-import logger from './logger'
+import logger from './log'
 import { Logger } from 'winston'
 
 const logStream = {
