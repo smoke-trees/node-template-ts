@@ -1,6 +1,6 @@
 import app from './app'
 import http from 'http'
-import logger from './logging/logger'
+import logger from './log/log'
 
 const PORT: number = Number(process.env.PORT) || 8080
 
