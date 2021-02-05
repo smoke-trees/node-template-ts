@@ -20,3 +20,7 @@ export interface ModelResponse {
   updateId?: number | string;
   deleteId?: number | string;
 }
+
+export interface InjectorInterface {
+  database: Database;
+}
