@@ -1,24 +1,30 @@
-import mongodb, { Collection } from 'mongodb'
-import { DatabaseObjectInterface } from '../@types/database'
+import { Pool, PoolClient, QueryResult } from 'pg'
 import log from '../log/log'
+import config from './config'
 
-const connectionString: string = process.env.CONNECTION_STRING ?? 'mongodb://localhost:27017'
-const databaseName: string = process.env.DB_NAME ?? 'statedb'
+const pool = new Pool(config)
 
-const connect = async (): Promise<DatabaseObjectInterface> => {
-  try {
-    const connection = await mongodb.MongoClient.connect(connectionString)
-    const db = connection.db(databaseName)
-    log.info('Connected to mongo db sucessfully', { function: 'connect' })
-    return {
-      connection, db
-    }
-  } catch (error) {
-    log.error('Error in connecting to mongo db', { function: 'connect mongo', error: error.stack })
-    process.exit(1)
-  }
+pool.on('error', (err) => {
+  log.error('Unexpected error on the database client', { functionName: 'databaseConnection', error: err.stack })
+  // process.exit(-1)
+})
+
+pool.on('connect', () => {
+  log.info('A new client to database connected', { functionName: 'databaseClientConnected' })
+})
+
+pool.on('remove', () => {
+  log.info('A client from database has been removed', { funtionName: 'databaseClientRemoved' })
+})
+
+/* eslint  @typescript-eslint/no-explicit-any:"off" */
+export const query = async (text: string, params?: any): Promise<QueryResult<any>> => {
+  return pool.query(text, params)
 }
 
-const DatabaseObject = connect()
+export const getClient = async (): Promise<PoolClient> => {
+  const client = await pool.connect()
+  client.release()
+  return client
+}
 
-export default DatabaseObject

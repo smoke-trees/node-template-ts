@@ -1,8 +1,9 @@
 import { Database } from '../@types/database'
-import connection from './connection'
+import { getClient, query } from './connection'
 
 const Db: Database = {
-  connection
+  query,
+  getClient
 }
 
 export default Db

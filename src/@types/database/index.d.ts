@@ -1,24 +1,22 @@
-import { Collection, Db, MongoClient, ObjectId } from 'mongodb'
+import { PoolClient, QueryResult } from 'pg'
 import { ErrorCodes } from '../model'
 
-export interface DatabaseObjectInterface {
-  connection: MongoClient;
-  db: Db;
+/* eslint  @typescript-eslint/no-explicit-any:"off" */
+export interface Database {
+  getClient: () => Promise<PoolClient>;
+  query: (text: string, params?: any) => Promise<QueryResult<any>>;
 }
 
 export interface DatabaseResult {
   errorCode: ErrorCodes;
   message: string;
-  insertId?: ObjectId;
-  upsertId?: ObjectId;
-  updatedId?: string;
-  deletedId?: string;
 }
 
-export interface Database {
-  connection: Promise<DatabaseObjectInterface>;
-}
-
-export interface InjectorInterface {
-  database: Database;
+export interface ModelResponse {
+  errorCode: ErrorCodes;
+  message: string;
+  insertId?: number | string;
+  upsertId?: number | string;
+  updateId?: number | string;
+  deleteId?: number | string;
 }

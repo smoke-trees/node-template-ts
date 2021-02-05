@@ -1,12 +1,7 @@
-import { ObjectId } from 'mongodb'
 
 export interface ModelResponse {
   errorCode: ErrorCodes;
   message: string;
-  insertId?: ObjectId;
-  upsertId?: ObjectId;
-  updateId?: string;
-  deleteId?: string;
 }
 
 export const enum ErrorCodes {
