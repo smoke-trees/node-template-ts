@@ -3,7 +3,7 @@ import logger from './log'
 import { Logger } from 'winston'
 
 const logStream = {
-  write: (message: string): Logger => logger.info(message)
+  write: (message: string): Logger => logger.logger.info(message)
 }
 
 const log = morgan('common', { stream: logStream })
