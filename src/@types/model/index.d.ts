@@ -16,5 +16,5 @@ export const enum ErrorCodes {
     NotAuthorized = '401',
     NotFound = '404',
     NoUpdatesPerformed = '1002',
-    UnkownServerError = '500'
+    UnknownServerError = '500'
   }
