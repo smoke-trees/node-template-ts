@@ -9,7 +9,7 @@
     "test": " mocha -r ts-node/register --file src/tests/* --file src/tests/setup/after.test.ts",
     "watch": "tsc -w",
     "dev": "nodemon  dist/server.js",
-    "start": "node dist/server.js",
+    "start": "node dist/index.js",
     "lint": "standardx **/*.ts --fix",
     "coverage": "tsc && nyc --reporter=lcov npm run test && codecov"
   },
@@ -41,7 +41,7 @@
     ]
   },
   "dependencies": {
-    "@smoke-trees/smoke-context": "^1.2.1",
+    "@smoke-trees/smoke-context": "^1.2.2",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "express": "^4.17.1",
