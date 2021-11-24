@@ -1,4 +1,5 @@
 import express, { Application as ExpressApplication, RequestHandler } from 'express'
+import { Server } from 'http'
 import compression from 'compression'
 import cors from 'cors'
 import { ContextProvider } from '@smoke-trees/smoke-context'
@@ -8,7 +9,6 @@ import Controller from './controller'
 import RouteHandler from './RouteHandler'
 import Settings from './settings'
 
-
 export default class Application extends RouteHandler {
   private readonly app: ExpressApplication
   private readonly controllers: Controller[];
@@ -16,7 +16,7 @@ export default class Application extends RouteHandler {
   protected readonly port: string;
   protected mw: RequestHandler[];
 
-  constructor() {
+  constructor () {
     const app = express()
     super(app)
     this.app = app
@@ -28,29 +28,27 @@ export default class Application extends RouteHandler {
     this.loadMiddleware()
   }
 
-  public run() {
+  public async run (): Promise<Server> {
     return this.app.listen(this.port, () => {
       log.info(`Started server on port ${this.port}`, 'Application.run')
     })
   }
 
-  public getApp() {
+  public getApp (): ExpressApplication {
     return this.app
   }
 
-
-  public loadControllers() {
+  public loadControllers (): void {
     this.controllers.forEach((controller) => {
       this.app.use(controller.path, controller.setRoutes())
     })
-
   }
 
-  public addController(controller: Controller) {
+  public addController (controller: Controller): void {
     this.controllers.push(controller)
   }
 
-  public setMiddleware() {
+  public setMiddleware (): void {
     this.mw.push(cors())
     this.mw.push(morgan)
     this.mw.push(ContextProvider.getMiddleware({ headerName: 'X-Request-ID' }))

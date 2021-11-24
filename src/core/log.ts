@@ -1,7 +1,7 @@
 import { createLogger, format, Logger, transports } from 'winston'
 import { ContextProvider } from '@smoke-trees/smoke-context'
 
-const contextFormat = format((info, { opts }) => {
+const contextFormat = format((info) => {
   const context = ContextProvider.getContext()
   info.traceId = context?.traceId
   return info
@@ -22,35 +22,34 @@ const logger = createLogger({
   transports: wTransports
 })
 
-
 class CustomLogger {
   private _logger: Logger
 
-  public get logger(): Logger {
+  public get logger (): Logger {
     return this._logger
   }
 
-  public set logger(value: Logger) {
+  public set logger (value: Logger) {
     this._logger = value
   }
 
-  constructor(logger: Logger) {
+  constructor (logger: Logger) {
     this._logger = logger
   }
 
-  info(message: string, functionName?: string, meta?: any): void {
+  info (message: string, functionName?: string, meta?: any): void {
     this._logger.info(message, { functionName, ...meta })
   }
 
-  debug(message: string, functionName?: string, meta?: any): void {
+  debug (message: string, functionName?: string, meta?: any): void {
     this._logger.debug(message, { functionName, ...meta })
   }
 
-  trace(message: string, functionName?: string, meta?: any): void {
+  trace (message: string, functionName?: string, meta?: any): void {
     this._logger.error(message, { functionName, ...meta })
   }
 
-  error(message: string, functionName?: string, error?: unknown, meta?: any): void {
+  error (message: string, functionName?: string, error?: unknown, meta?: any): void {
     this._logger.error(message, {
       error: error instanceof Error && error.stack,
       functionName,
@@ -58,11 +57,11 @@ class CustomLogger {
     })
   }
 
-  warn(message: string, functionName?: string, meta?: any): void {
+  warn (message: string, functionName?: string, meta?: any): void {
     this._logger.warn(message, { functionName, ...meta })
   }
 
-  fatal(message: string, functionName?: string, meta?: any): void {
+  fatal (message: string, functionName?: string, meta?: any): void {
     this._logger.error(message, { functionName, ...meta })
   }
 }
