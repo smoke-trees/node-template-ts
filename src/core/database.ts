@@ -1,21 +1,49 @@
-import { Connection, ConnectionOptions, createConnection, getConnection } from 'typeorm'
-import Application from './app'
-import path from 'path'
+import fs from 'fs';
+import path from 'path';
+
+import { Connection, ConnectionOptions, createConnection, getConnection } from 'typeorm';
 import settings from './settings'
+import log from './log';
+import { ConsumerEntity } from '../database/entities/IConsumer';
+import { ConsultantEntity } from '../database/entities/IConsultant';
+import { GeneratorEntity } from '../database/entities/IGenerator';
+import { UserEntity } from '../database/entities/IUser';
+
 
 class Database {
   private connection!: Connection;
   private connectionName: string | undefined;
+  private _ready: Promise<boolean>;
 
-  constructor(app: Application) {
-    this.connectionName = settings.connectionName ;
-    this.connect()
+  get ready(): Promise<boolean> {
+    return this._ready
   }
 
-  async connect(): Promise<void> {
-    const connection = await createConnection(this.getConfig())
-    this.connection = connection
-    await connection.connect()
+  constructor() {
+    this.connectionName = settings.connectionName;
+    this._ready = new Promise(async (resolve, reject) => {
+      try {
+        await this.connect();
+        resolve(true)
+      } catch (error) {
+        reject(false)
+      }
+    })
+  }
+
+  async connect(): Promise<boolean> {
+    try {
+      log.info("initializing database")
+      const connection = await createConnection(this.getConfig()).then(connection => {
+        log.info('Database connected');
+        return connection
+      })
+      this.connection = connection
+      return true
+    } catch (error) {
+      log.error("Error in connecting to database", "Database/connect", error)
+      return false
+    }
   }
 
   async getConnection(): Promise<Connection> {
@@ -27,24 +55,32 @@ class Database {
   }
 
 
-  getConfig(): ConnectionOptions {
 
+  getConfig(): ConnectionOptions {
     const config: ConnectionOptions = {
       type: 'postgres',
       port: 5432,
+      ssl: process.env.NODE_ENV === 'production'
+        ? {
+          ca: fs.readFileSync(path.resolve(__dirname, '..', '..', 'ca.cert'))
+        }
+        : undefined,
       name: this.connectionName,
-      database: process.env.PGDATABASE ?? 'postgres',
-      host: process.env.PGHOST ?? '172.17.0.1',
-      username: process.env.PGUSER ?? 'postgres',
-      password: process.env.PGPASSWORD ?? 'mysecretpassword',
+      database: settings.pgDatabase,
+      host: settings.pgHost,
+      username: settings.pgUser,
+      password: settings.pgPassword,
       entities: [
-        path.join(__dirname, '/entity/*.js'),
+        ConsumerEntity, ConsultantEntity, GeneratorEntity, UserEntity,
       ],
       synchronize: true,
-      logging: ['error', 'migration']
+      migrationsRun: false,
+      migrations: [],
+      logging: ['error', 'migration', 'query', 'schema', 'warn', 'info']
     }
     return config
   }
 }
+
 
 export default Database

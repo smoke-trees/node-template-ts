@@ -12,9 +12,12 @@
       "./node_modules/@types",
       "src/@types"
     ],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "moduleResolution": "node",
     /* Advanced Options */
-    "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
+    "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file. */
+    "sourceMap": true
   },
   "include": [
     "./src",
