@@ -20,9 +20,9 @@ export class Settings implements SettingsInterface {
     this.interceptors = true
     this.connectionName = 'default'
     this.pgHost = this.getValue('PGHOST', 'localhost')
-    this.pgPassword = this.getValue('PGPASSWORD', 'earnest1234')
-    this.pgDatabase = this.getValue('PGDATABASE', 'bwdb')
-    this.pgUser = this.getValue('PGUSER', 'bwdbuser')
+    this.pgPassword = this.getValue('PGPASSWORD', 'mysecretpassword')
+    this.pgDatabase = this.getValue('PGDATABASE', 'postgres')
+    this.pgUser = this.getValue('PGUSER', 'postgres')
   }
 
   getValue(key: string, defaultValue: string): string;

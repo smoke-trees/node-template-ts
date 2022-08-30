@@ -4,10 +4,10 @@ import path from 'path';
 import { Connection, ConnectionOptions, createConnection, getConnection } from 'typeorm';
 import settings from './settings'
 import log from './log';
-import { ConsumerEntity } from '../database/entities/IConsumer';
-import { ConsultantEntity } from '../database/entities/IConsultant';
-import { GeneratorEntity } from '../database/entities/IGenerator';
-import { UserEntity } from '../database/entities/IUser';
+import { ConsumerEntity } from '../database/entities/Consumer';
+import { ConsultantEntity } from '../database/entities/Consultant';
+import { GeneratorEntity } from '../database/entities/Generator';
+import { UserEntity } from '../database/entities/User';
 
 
 class Database {
@@ -76,7 +76,8 @@ class Database {
       synchronize: true,
       migrationsRun: false,
       migrations: [],
-      logging: ['error', 'migration', 'query', 'schema', 'warn', 'info']
+      logging: ['error', 'warn', 'info']
+      // logging: ['error', 'migration', 'query', 'schema', 'warn', 'info']
     }
     return config
   }

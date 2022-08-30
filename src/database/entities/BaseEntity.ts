@@ -16,7 +16,7 @@ export default abstract class BaseEntity {
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamp with time zone' })
   updatedAt!: Date;
 
-  async create(manager?: EntityManager): Promise<IResult<number | string>> {
+  async create(manager?: EntityManager): Promise<IResult<string>> {
     if (!manager) {
       manager = getConnection().createEntityManager()
     }
@@ -55,7 +55,6 @@ export default abstract class BaseEntity {
     const repository = manager.getRepository<T>(this);
     try {
       const idFieldName = (this.constructor as any).idFieldName as string ?? (this.idFieldName)
-      console.log(idFieldName,)
       const result = await repository.findOne({ where: { [idFieldName]: id } as FindConditions<T>, ...options });
       if (!result) {
         log.debug("Find not found", `${this.name}/read`, { id });

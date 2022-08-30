@@ -6,9 +6,11 @@
   "scripts": {
     "build": "npm run lint && tsc",
     "build-nolint": "tsc",
-    "test": " mocha -r ts-node/register --file src/tests/* --file src/tests/setup/after.test.ts",
+    "test": "NODE_OPTIONS=--enable-source-maps mocha --exit --file dist/tests/index.test.js",
+    "test-w": "set NODE_OPTIONS=--enable-source-maps && set CI=true && mocha --exit dist/tests/index.test.js",
     "watch": "tsc -w",
-    "dev": "nodemon  dist/server.js",
+    "dev": "NODE_OPTIONS=--enable-source-maps nodemon -w ./dist -w ./src -w docs/build/docs.yaml dist/index.js",
+    "dev-w": "set NODE_OPTIONS=--enable-source-maps && nodemon dist/index.js",
     "start": "node dist/index.js",
     "lint": "standardx **/*.ts --fix",
     "coverage": "tsc && nyc --reporter=lcov npm run test && codecov"
