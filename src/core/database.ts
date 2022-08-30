@@ -1,35 +1,43 @@
-import { Connection, ConnectionOptions, createConnection, getConnection } from 'typeorm'
-import Application from './app'
-import path from 'path'
-import settings from './settings'
+import { DataSource, DataSourceOptions } from 'typeorm';
+import log from './log';
+import settings from './settings';
 
 class Database {
-  private connection!: Connection;
+  private connection!: DataSource;
   private connectionName: string | undefined;
+  private _ready: Promise<boolean>
 
-  constructor(app: Application) {
-    this.connectionName = settings.connectionName ;
-    this.connect()
+  get ready(): Promise<boolean> {
+    return this._ready
   }
 
-  async connect(): Promise<void> {
-    const connection = await createConnection(this.getConfig())
-    this.connection = connection
-    await connection.connect()
+  constructor() {
+    this.connectionName = settings.connectionName;
+    this._ready = this.connect()
   }
 
-  async getConnection(): Promise<Connection> {
-    if (!this.connection) {
+  async connect(): Promise<boolean> {
+    this.connection = new DataSource(this.getConfig())
+    try {
+      await this.connection.initialize()
+      log.info("Database connected", 'database/connect')
+      return true
+    } catch (error) {
+      log.error('Database connection error', 'database/connect', error, { config: this.getConfig() })
+      return false
+    }
+  }
+
+  async getConnection(): Promise<DataSource> {
+    if (!this.connection || !(await this.ready)) {
       throw new Error('Database not connected')
     }
-    const client = getConnection(this.connectionName)
-    return client
+    return this.connection
   }
 
 
-  getConfig(): ConnectionOptions {
-
-    const config: ConnectionOptions = {
+  getConfig(): DataSourceOptions {
+    const config: DataSourceOptions = {
       type: 'postgres',
       port: 5432,
       name: this.connectionName,
@@ -38,7 +46,6 @@ class Database {
       username: process.env.PGUSER ?? 'postgres',
       password: process.env.PGPASSWORD ?? 'mysecretpassword',
       entities: [
-        path.join(__dirname, '/entity/*.js'),
       ],
       synchronize: true,
       logging: ['error', 'migration']
