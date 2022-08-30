@@ -1,4 +1,5 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
+import { User } from '../app/users';
 import log from './log';
 import settings from './settings';
 
@@ -46,6 +47,7 @@ class Database {
       username: process.env.PGUSER ?? 'postgres',
       password: process.env.PGPASSWORD ?? 'mysecretpassword',
       entities: [
+        User
       ],
       synchronize: true,
       logging: ['error', 'migration']

@@ -15,7 +15,7 @@ export default class Application extends RouteHandler {
   private readonly controllers: Controller[];
   protected readonly port: string;
   protected mw: RequestHandler[];
-  protected database: Database;
+  public database: Database;
 
   constructor() {
     const app = express()
@@ -26,12 +26,13 @@ export default class Application extends RouteHandler {
     this.mw = []
     this.setMiddleware()
     this.loadMiddleware()
-    this.database = new Database(this)
-    this.connectToDatabase()
+    this.database = new Database()
   }
 
 
   public async run(): Promise<Server> {
+    console.log('123');
+
     return this.app.listen(this.port, () => {
       log.info(`Started server on port ${this.port}`, 'Application.run')
     })
@@ -56,9 +57,8 @@ export default class Application extends RouteHandler {
     this.mw.push(morgan)
     this.mw.push(ContextProvider.getMiddleware({ headerName: 'X-Request-ID' }))
     this.mw.push(compression())
+    this.mw.push(express.json({ }))
   }
 
-  public connectToDatabase(): void {
-    this.database.connect()
-  }
+  
 }

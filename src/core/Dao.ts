@@ -34,10 +34,10 @@ export class Dao<Entity extends BaseEntity> {
           code: ErrorCodes.SUCCESS
         },
         message: "Success in insert",
-        result: (this as any)[(this.constructor as any).idFieldName]
+        result: result.identifiers[0].id
       }
     } catch (error) {
-      log.error(`Error in inserting ${this.constructor.name}`, `${this.constructor.name}/insert`, error, { values: this });
+      log.error(`Error in inserting ${this.entityName}`, `${this.entityName}/insert`, error, { values: this });
       return {
         status: {
           error: true,
@@ -96,13 +96,16 @@ export class Dao<Entity extends BaseEntity> {
   }
 
   async update(id: string | number | FindOptionsWhere<Entity>, values: QueryDeepPartialEntity<Entity>, manager?: EntityManager): Promise<IResult<number>> {
+
     if (!manager) {
       manager = (await this.database.getConnection()).createEntityManager()
     }
     const repository = manager.getRepository(this.entity);
     let copy
     try {
+      console.log(values)
       const result = await repository.update(id, values);
+      console.log(values)
       if (result.affected === 0) {
         log.debug("Update not found", `${this.entityName}/update`, { id, values: this });
         return {
@@ -136,9 +139,8 @@ export class Dao<Entity extends BaseEntity> {
     }
   }
 
-  async readMany(page = 1, count = 10, order: 'ASC' | 'DESC' = 'DESC', field = 'createdAt',
-    where?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[], manager?: EntityManager):
-    Promise<IResult<Entity[]>> {
+  async readMany(page = 1, count = 10, order: 'ASC' | 'DESC' = 'DESC', field: keyof Entity = 'createdAt',
+    where?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[], manager?: EntityManager): Promise<IResult<Entity[]>> {
     if (!manager) {
       manager = (await this.database.getConnection()).createEntityManager()
     }
@@ -185,7 +187,8 @@ export class Dao<Entity extends BaseEntity> {
     }
   }
 
-  async readManyWithoutPagination(order: 'ASC' | 'DESC' = 'DESC', field = 'createdAt', where?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[], manager?: EntityManager) {
+  async readManyWithoutPagination(order: 'ASC' | 'DESC' = 'DESC', field: keyof Entity = 'createdAt', where?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[], manager?: EntityManager)
+    : Promise<IResult<Entity[]>> {
     if (!manager) {
       manager = (await this.database.getConnection()).createEntityManager()
     }
@@ -201,16 +204,17 @@ export class Dao<Entity extends BaseEntity> {
       if (result.length === 0) {
         log.debug("Find not found", `${this.entityName}/readManyWithoutPagination`, { order, field, where });
         return {
-          error: {
+          status: {
             error: true,
             code: ErrorCodes.NOT_FOUND
           },
           message: "Not found",
+          result: null
         }
       }
       log.debug("Successfully found", `${this.entityName}/readManyWithoutPagination`, { order, field });
       return {
-        error: {
+        status: {
           error: false,
           code: ErrorCodes.SUCCESS
         },
@@ -220,11 +224,12 @@ export class Dao<Entity extends BaseEntity> {
     } catch (error) {
       log.error("Error in reading", `${this.entityName}/readManyWithoutPagination`, error, { order, field });
       return {
-        error: {
+        status: {
           error: true,
           code: ErrorCodes.DATABASE_ERROR
         },
-        message: "Error in reading "
+        message: "Error in reading ",
+        result: null
       }
     }
   }

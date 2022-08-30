@@ -8,7 +8,7 @@
     "build-nolint": "tsc",
     "test": " mocha -r ts-node/register --file src/tests/* --file src/tests/setup/after.test.ts",
     "watch": "tsc -w",
-    "dev": "nodemon  dist/server.js",
+    "dev": "nodemon  dist/index.js",
     "start": "node dist/index.js",
     "lint": "standardx **/*.ts --fix",
     "coverage": "tsc && nyc --reporter=lcov npm run test && codecov"
@@ -47,10 +47,10 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "morgan": "^1.10.0",
-    "typeorm": "^0.3.9",
     "pg": "^8.8.0",
-    "winston": "^3.8.1",
     "swagger-ui-express": "^4.5.0",
+    "typeorm": "0.3.8",
+    "winston": "^3.8.1",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
@@ -72,6 +72,6 @@
     "nodemon": "^2.0.19",
     "c8": "^7.12.0",
     "standardx": "^7.0.0",
-    "typescript": "^3.9.10"
+    "typescript": "4.7.4"
   }
 }

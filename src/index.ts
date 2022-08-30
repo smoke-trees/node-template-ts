@@ -1,9 +1,15 @@
-import TestController from './app/test'
+import { UserController, UserDoa, UserService } from './app/users'
 import Application from './core/app'
 
 const app = new Application()
 
-app.addController(new TestController(app))
+///User Service
+const userDao = new UserDoa(app.database)
+const userService = new UserService(userDao)
+const userController = new UserController(app, userService)
+
+
+app.addController(userController)
 
 app.loadControllers()
 
