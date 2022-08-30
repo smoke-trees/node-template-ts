@@ -101,13 +101,11 @@ export class Dao<Entity extends BaseEntity> {
       manager = (await this.database.getConnection()).createEntityManager()
     }
     const repository = manager.getRepository(this.entity);
-    let copy
+    let copy = { ...values };
     try {
-      console.log(values)
-      const result = await repository.update(id, values);
-      console.log(values)
+      const result = await repository.update(id, copy);
       if (result.affected === 0) {
-        log.debug("Update not found", `${this.entityName}/update`, { id, values: this });
+        log.debug("Update not found", `${this.entityName}/update`, { id,  });
         return {
           status: {
             error: true,
@@ -117,7 +115,7 @@ export class Dao<Entity extends BaseEntity> {
           result: null
         }
       }
-      log.debug("Successfully updated", `${this.entityName}/update`, { id, values: this });
+      log.debug("Successfully updated", `${this.entityName}/update`, { id,  });
       return {
         status: {
           error: false,
@@ -127,7 +125,7 @@ export class Dao<Entity extends BaseEntity> {
         result: result.affected ?? null
       }
     } catch (error) {
-      log.error("Error in updating", `${this.entityName}/update`, error, { id, values: this, copy });
+      log.error("Error in updating", `${this.entityName}/update`, error, { id,  copy });
       return {
         status: {
           error: true,

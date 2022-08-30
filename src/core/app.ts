@@ -31,8 +31,6 @@ export default class Application extends RouteHandler {
 
 
   public async run(): Promise<Server> {
-    console.log('123');
-
     return this.app.listen(this.port, () => {
       log.info(`Started server on port ${this.port}`, 'Application.run')
     })

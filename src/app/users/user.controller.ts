@@ -7,13 +7,13 @@ import { ServiceController } from "../../core/ServiceController";
 import { User } from "./user.entity";
 import { UserService } from "./user.service";
 
-export  class UserController extends ServiceController<User>  {
+export class UserController extends ServiceController<User>  {
   public path: string = '/user'
   protected controllers: Controller[];
   protected mw: RequestHandler<ParamsDictionary, any, any, ParsedQs, Record<string, any>>[];
   public service: UserService;
   constructor(app: Application, userService: UserService) {
-    super(app, User, userService);
+    super(app, User, userService, { paths: { update: false } });
     this.service = userService;
     this.controllers = [];
     this.mw = []

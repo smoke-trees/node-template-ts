@@ -22,4 +22,35 @@ export class BaseEntity {
     Object.assign(this, data);
     return this
   }
+
+  validate(validator: boolean, required: boolean, updatable: boolean): string[] {
+    const metadataKeys = Reflect.getMetadataKeys(this)
+    const issues: string[] = []
+    metadataKeys.forEach(key => {
+      const [_, propertyName, type] = key.split(':')
+      const value = (this as any)[propertyName]
+      if (validator && type === 'validator') {
+        const validatorFunction = Reflect.getMetadata(key, this)
+        if (validatorFunction) {
+          const result = validatorFunction(value)
+          if (!result) {
+            issues.push(`${propertyName} is invalid`)
+          }
+        }
+      }
+      if (required && type === 'required') {
+        const required = Reflect.getMetadata(key, this)
+        if (required && !value) {
+          issues.push(`${propertyName} is required`)
+        }
+      }
+      if (updatable && type === 'updatable') {
+        const updatable = Reflect.getMetadata(key, this)
+        if (!updatable && value) {
+          issues.push(`${propertyName} is not updatable`)
+        }
+      }
+    })
+    return issues
+  }
 }

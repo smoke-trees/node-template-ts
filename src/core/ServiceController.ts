@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { ErrorCodes, IResult } from "../result";
 import Application from "./app";
 import { BaseEntity, BaseEntityConstructor, createEntity } from "./BaseEntity";
 import Controller, { Methods, Route } from "./controller";
@@ -13,16 +14,18 @@ export interface IServiceControllerPathOptions {
   delete: boolean;
 }
 
-export interface IServiceControllerOptions {
-  paths: {
-    [key: string]: boolean;
+export interface IPathsOptions {
+    // [key: string]: boolean;
     read: boolean;
     readMany: boolean;
     readManyWithoutPagination: boolean;
     create: boolean;
     update: boolean;
     delete: boolean;
-  }
+}
+
+export interface IServiceControllerOptions {
+  paths:  Partial<IPathsOptions>
 }
 
 export abstract class ServiceController<Entity extends BaseEntity> extends Controller {
@@ -40,7 +43,8 @@ export abstract class ServiceController<Entity extends BaseEntity> extends Contr
       read: true,
       readMany: true,
       readManyWithoutPagination: true,
-      update: true
+      update: true,
+      ...options?.paths
     }
     this.EntityConstructor = entityConstructor
     this.routes = []
@@ -85,11 +89,7 @@ export abstract class ServiceController<Entity extends BaseEntity> extends Contr
       })
     }
   }
-  async create(req: Request, res: Response) {
-    const entity = createEntity<Entity>(this.EntityConstructor, req.body)
-    const response = await this.service.create(entity as any)
-    res.status(200).json(response)
-  }
+
 
   async readAll(req: Request, res: Response) {
     const { orderBy, order, page, count, nonPaginated, ...filter } = req.query
@@ -118,11 +118,44 @@ export abstract class ServiceController<Entity extends BaseEntity> extends Contr
     const result = await this.service.readOne(id)
     res.status(200).json(result)
   }
+
   async update(req: Request, res: Response) {
     const { id } = req.params
-    const body = req.body
-    const result = await this.service.update(id, body)
+    const entity = createEntity<Entity>(this.EntityConstructor, req.body)
+    const value = entity.validate(true, false, true)
+    if (value.length > 0) {
+      const result: IResult<null> = {
+        message: value.join(', '),
+        result: null,
+        status: {
+          code: ErrorCodes.INVALID_DATA,
+          error: true
+        }
+      }
+      res.status(400).json(result)
+      return
+    }
+    const result = await this.service.update(id, entity as any)
     res.status(200).json(result)
+  }
+
+  async create(req: Request, res: Response) {
+    const entity = createEntity<Entity>(this.EntityConstructor, req.body)
+    const value = entity.validate(true, true, false)
+    if (value.length > 0) {
+      const result: IResult<null> = {
+        message: value.join(', '),
+        result: null,
+        status: {
+          code: ErrorCodes.INVALID_DATA,
+          error: true
+        }
+      }
+      res.status(400).json(result)
+      return
+    }
+    const response = await this.service.create(entity as any)
+    res.status(200).json(response)
   }
   async delete(req: Request, res: Response) {
     const { id } = req.params
