@@ -38,7 +38,7 @@ export function ConsultantServiceTest(ConsultantService: ConsultantServiceClass,
                 name: "Consultant 1",
             });
             assert.isFalse(result.error.error);
-            assert.equal(result.error.code, ErrorCodes.Success, 'Wallet creation error')
+            assert.equal(result.error.code, ErrorCodes.Success, 'Consultant creation error')
 
             const result2 = await GeneratorService.createGenerator({
                 name: "Generator 1",
