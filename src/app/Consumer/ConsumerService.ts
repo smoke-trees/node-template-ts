@@ -23,4 +23,28 @@ export class ConsumerService {
         var updatedConsumer = await consumerEntity.result!.update(consumerId);
         return updatedConsumer;
     }
+
+    async getConsumer(id: string) {
+        return await ConsumerEntity.read<ConsumerEntity>(id);
+    }
+
+    async deleteConsumer(id: string) {
+        return await ConsumerEntity.delete<ConsumerEntity>(id);
+    }
+
+    async updateConsumer(consultant: Partial<ConsumerEntity>) {
+        const consultantToEdit = await ConsumerEntity.read<ConsumerEntity>(consultant.id);
+        if (consultantToEdit.error.error) {
+            return consultantToEdit;
+        } else {
+            const entity: ConsumerEntity = consultantToEdit.result!;
+            entity.name = consultant.name ? consultant.name : entity.name;
+            entity.quantumConsumed = consultant.quantumConsumed ? consultant.quantumConsumed : entity.quantumConsumed;
+            entity.consultant = consultant.consultant ? consultant.consultant : entity.consultant;
+            entity.consultantId = consultant.consultantId ? consultant.consultantId : entity.consultantId;
+            entity.customFields = consultant.customFields ? consultant.customFields : entity.customFields;
+            const updateResult = await entity.update(entity.id);
+            return updateResult;
+        }
+    }
 }
