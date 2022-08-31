@@ -7,8 +7,8 @@ import { UserServiceTest } from "./user.test";
 export function ServicesTest(app: Application, Services: any): void {
   describe("Services Test", function () {
     UserServiceTest(Services.userService);
-    ConsultantServiceTest(Services.consultantService, Services.consumerService, Services.generatorService);
-    ConsumerServiceTest(Services.consumerService);
-    GeneratorServiceTest(Services.generatorService);
+    ConsultantServiceTest(Services.consultantService);
+    ConsumerServiceTest(Services.consumerService, Services.consultantService);
+    GeneratorServiceTest(Services.generatorService, Services.consultantService);
   })
 }
