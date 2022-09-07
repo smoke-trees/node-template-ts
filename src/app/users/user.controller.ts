@@ -13,7 +13,7 @@ export class UserController extends ServiceController<User>  {
   protected mw: RequestHandler<ParamsDictionary, any, any, ParsedQs, Record<string, any>>[];
   public service: UserService;
   constructor(app: Application, userService: UserService) {
-    super(app, User, userService, { paths: { update: false } });
+    super(app, User, userService, { paths: { } });
     this.service = userService;
     this.controllers = [];
     this.mw = []

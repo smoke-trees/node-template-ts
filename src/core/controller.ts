@@ -38,21 +38,19 @@ export default abstract class Controller extends Router {
     // Set HTTP method, middleware, and handler for each route
     // Returns Router object, which we will use in Server class
     for (const route of this.routes) {
-      for (const mw of route.localMiddleware) {
-        this.router.use(route.path, mw)
-      }
+      
       switch (route.method) {
         case Methods.GET:
-          this.router.get(route.path, route.handler)
+          this.router.get(route.path,...route.localMiddleware, route.handler)
           break
         case Methods.POST:
-          this.router.post(route.path, route.handler)
+          this.router.post(route.path,...route.localMiddleware, route.handler)
           break
         case Methods.PUT:
-          this.router.put(route.path, route.handler)
+          this.router.put(route.path,...route.localMiddleware ,route.handler)
           break
         case Methods.DELETE:
-          this.router.delete(route.path, route.handler)
+          this.router.delete(route.path, ...route.localMiddleware,route.handler)
           break
         default:
         // Throw exception

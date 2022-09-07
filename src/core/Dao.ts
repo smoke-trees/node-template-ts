@@ -1,9 +1,10 @@
-import { EntityManager, EntityTarget, FindOneOptions, FindOptionsWhere } from "typeorm";
+import { Entity, EntityManager, EntityTarget, FindOneOptions, FindOptionsWhere } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
-import { ErrorCodes, IResult } from "../result";
+import { IResult, ErrorCode } from "../result";
 import { BaseEntity } from "./BaseEntity";
 import Database from "./database";
 import log from "./log";
+
 
 export class Dao<Entity extends BaseEntity> {
   protected database: Database;
@@ -25,23 +26,23 @@ export class Dao<Entity extends BaseEntity> {
     try {
       const result = await repository.insert(value);
       if (!(value instanceof Array)) {
-        value.id = result.identifiers[0].id;
+        value.id = result.identifiers[0].id ?? (result.identifiers[0] as [key: string])[0];
       }
       log.info("Successfully created", `${this.entityName}/create`, {});
       return {
         status: {
           error: false,
-          code: ErrorCodes.SUCCESS
+          code: ErrorCode.Created
         },
         message: "Success in insert",
         result: result.identifiers[0].id
       }
     } catch (error) {
-      log.error(`Error in inserting ${this.entityName}`, `${this.entityName}/insert`, error, { values: this });
+      log.error(`Error in inserting ${this.entityName}`, `${this.entityName}/insert`, error);
       return {
         status: {
           error: true,
-          code: ErrorCodes.DATABASE_ERROR
+          code: ErrorCode.DatabaseError
         },
         message: "Error in insert",
         result: null
@@ -67,7 +68,7 @@ export class Dao<Entity extends BaseEntity> {
         return {
           status: {
             error: true,
-            code: ErrorCodes.NOT_FOUND
+            code: ErrorCode.NotFound
           },
           message: "Not found",
           result: null
@@ -77,7 +78,7 @@ export class Dao<Entity extends BaseEntity> {
       return {
         status: {
           error: false,
-          code: ErrorCodes.SUCCESS
+          code: ErrorCode.Success
         },
         message: "Success in read",
         result: result
@@ -87,7 +88,7 @@ export class Dao<Entity extends BaseEntity> {
       return {
         status: {
           error: true,
-          code: ErrorCodes.DATABASE_ERROR
+          code: ErrorCode.DatabaseError
         },
         message: "Error in reading",
         result: null
@@ -105,33 +106,33 @@ export class Dao<Entity extends BaseEntity> {
     try {
       const result = await repository.update(id, copy);
       if (result.affected === 0) {
-        log.debug("Update not found", `${this.entityName}/update`, { id,  });
+        log.debug("Update not found", `${this.entityName}/update`, { id, });
         return {
           status: {
             error: true,
-            code: ErrorCodes.NOT_FOUND
+            code: ErrorCode.NotFound
           },
           message: "Not found",
           result: null
         }
       }
-      log.debug("Successfully updated", `${this.entityName}/update`, { id,  });
+      log.debug("Successfully updated", `${this.entityName}/update`, { id, });
       return {
         status: {
           error: false,
-          code: ErrorCodes.SUCCESS
+          code: ErrorCode.Success
         },
         message: "Success in update",
         result: result.affected ?? null
       }
     } catch (error) {
-      log.error("Error in updating", `${this.entityName}/update`, error, { id,  copy });
+      log.error("Error in updating", `${this.entityName}/update`, error, { id, copy });
       return {
         status: {
           error: true,
-          code: ErrorCodes.DATABASE_ERROR
+          code: ErrorCode.DatabaseError
         },
-        message: "Error in updating ",
+        message: "Error in updating",
         result: null
       }
     }
@@ -152,22 +153,11 @@ export class Dao<Entity extends BaseEntity> {
         take: count,
         order: orderValue,
       });
-      if (result.length === 0) {
-        log.debug("Find not found", `${this.entityName}/readMany`, { page, count, order, field });
-        return {
-          status: {
-            error: true,
-            code: ErrorCodes.NOT_FOUND
-          },
-          message: "Not found",
-          result: null
-        }
-      }
       log.debug("Successfully found", `${this.entityName}/readMany`, { page, count, order, field });
       return {
         status: {
           error: false,
-          code: ErrorCodes.SUCCESS
+          code: ErrorCode.Success
         },
         message: "Success in readMany",
         result
@@ -177,7 +167,7 @@ export class Dao<Entity extends BaseEntity> {
       return {
         status: {
           error: true,
-          code: ErrorCodes.DATABASE_ERROR
+          code: ErrorCode.DatabaseError
         },
         message: "Error in reading ",
         result: null
@@ -204,7 +194,7 @@ export class Dao<Entity extends BaseEntity> {
         return {
           status: {
             error: true,
-            code: ErrorCodes.NOT_FOUND
+            code: ErrorCode.NotFound
           },
           message: "Not found",
           result: null
@@ -214,7 +204,7 @@ export class Dao<Entity extends BaseEntity> {
       return {
         status: {
           error: false,
-          code: ErrorCodes.SUCCESS
+          code: ErrorCode.Success
         },
         message: "Success in readMany",
         result
@@ -224,7 +214,7 @@ export class Dao<Entity extends BaseEntity> {
       return {
         status: {
           error: true,
-          code: ErrorCodes.DATABASE_ERROR
+          code: ErrorCode.DatabaseError
         },
         message: "Error in reading ",
         result: null
@@ -245,7 +235,7 @@ export class Dao<Entity extends BaseEntity> {
         return {
           status: {
             error: true,
-            code: ErrorCodes.NOT_FOUND
+            code: ErrorCode.NotFound
           },
           message: "Not found",
           result: result.affected
@@ -255,7 +245,7 @@ export class Dao<Entity extends BaseEntity> {
       return {
         status: {
           error: false,
-          code: ErrorCodes.SUCCESS
+          code: ErrorCode.Success
         },
         message: "Success in delete",
         result: result.affected ?? 0
@@ -265,11 +255,51 @@ export class Dao<Entity extends BaseEntity> {
       return {
         status: {
           error: true,
-          code: ErrorCodes.DATABASE_ERROR
+          code: ErrorCode.DatabaseError
         },
         message: "Error in deleting",
         result: null
       }
     }
   }
+
+
+  // async exists(id: string | number | FindOptionsWhere<Entity>, manager?: EntityManager): Promise<IResult<boolean>> {
+  //   if (!manager) {
+  //     manager = (await this.database.getConnection()).createEntityManager()
+  //   }
+
+  //   const isExistsQuery = (query: string) =>
+  //     `SELECT EXISTS(${query}) AS "exists"`;
+  //   try {
+  //     const [{ exists }] = await manager.query(
+  //       isExistsQuery(
+  //         manager
+  //           .createQueryBuilder()
+  //           .select('*')
+  //           .from(this.entity, 'tbl')
+  //           .where('tbl.id = ?')
+  //           .getQuery(),
+  //       ), [id]);
+
+  //     return {
+  //       status: {
+  //         error: false,
+  //         code: ErrorCodes.Success
+  //       },
+  //       message: "Success in exists",
+  //       result: exists
+  //     }
+
+  //   } catch (error) {
+  //     return {
+  //       status: {
+  //         error: true,
+  //         code: ErrorCodes.DatabaseError
+  //       },
+  //       message: "Error in exists",
+  //       result: null
+  //     }
+  //   }
+  // }
 }

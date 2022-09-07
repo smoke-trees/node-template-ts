@@ -2,16 +2,19 @@
   "name": "template-ts",
   "version": "1.0.0",
   "description": "TypeScript version of our Node.js template",
-  "main": "dist/server.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "npm run lint && tsc",
     "build-nolint": "tsc",
-    "test": " mocha -r ts-node/register --file src/tests/* --file src/tests/setup/after.test.ts",
+    "test": "NODE_OPTIONS=--enable-source-maps mocha --exit --file dist/tests/index.test.js",
+    "test-w": "set NODE_OPTIONS=--enable-source-maps && set CI=true && mocha --exit dist/tests/index.test.js",
     "watch": "tsc -w",
-    "dev": "nodemon  dist/index.js",
+    "dev": "NODE_OPTIONS=--enable-source-maps nodemon -L -w ./dist -w ./src -w docs/build/docs.yaml dist/index.js",
+    "dev-w": "set NODE_OPTIONS=--enable-source-maps && nodemon -L -w dist -w src dist/index.js",
     "start": "node dist/index.js",
     "lint": "standardx **/*.ts --fix",
-    "coverage": "tsc && nyc --reporter=lcov npm run test && codecov"
+    "coverage": "tsc && nyc --reporter=lcov npm run test && codecov",
+    "coverage-w": "tsc && nyc --reporter=lcov npm run test-w && codecov"
   },
   "repository": {
     "type": "git",
