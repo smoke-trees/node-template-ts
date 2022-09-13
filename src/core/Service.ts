@@ -38,5 +38,4 @@ export abstract class Service<Entity extends BaseEntity> implements IService<Ent
   delete(id: string | number | string[] | FindOptionsWhere<Entity>): Promise<IResult<number>> {
     return this.dao.delete(id)
   }
-
 }

@@ -11,7 +11,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/dist/server.js",
+      "program": "${workspaceFolder}/dist/index.js",
       "runtimeExecutable": "nodemon"
     }
   ]

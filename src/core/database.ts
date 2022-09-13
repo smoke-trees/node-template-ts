@@ -5,7 +5,6 @@ import settings from './settings';
 
 class Database {
   private connection!: DataSource;
-  private connectionName: string | undefined;
   private _ready: Promise<boolean>
 
   get ready(): Promise<boolean> {
@@ -13,7 +12,6 @@ class Database {
   }
 
   constructor() {
-    this.connectionName = settings.connectionName;
     this._ready = this.connect()
   }
 
@@ -40,12 +38,12 @@ class Database {
   getConfig(): DataSourceOptions {
     const config: DataSourceOptions = {
       type: 'postgres',
-      port: 5432,
-      name: this.connectionName,
-      database: process.env.PGDATABASE ?? 'postgres',
-      host: process.env.PGHOST ?? '172.17.0.1',
-      username: process.env.PGUSER ?? 'postgres',
-      password: process.env.PGPASSWORD ?? 'mysecretpassword',
+      port: parseInt(settings.pgPort),
+      name: settings.connectionName,
+      database: settings.pgDatabase,
+      host: settings.pgHost,
+      username: settings.pgUser,
+      password: settings.pgPassword,
       entities: [
         User
       ],
