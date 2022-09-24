@@ -8,7 +8,6 @@ import log from './log'
 import Controller from './controller'
 import RouteHandler from './RouteHandler'
 import Database from './database'
-import settings from './settings'
 
 export default class Application extends RouteHandler {
   private readonly app: ExpressApplication
@@ -17,7 +16,7 @@ export default class Application extends RouteHandler {
   protected mw: RequestHandler[];
   public database: Database;
 
-  constructor() {
+  constructor(db: Database = new Database(true)) {
     const app = express()
     super(app)
     this.app = app
@@ -26,7 +25,7 @@ export default class Application extends RouteHandler {
     this.mw = []
     this.setMiddleware()
     this.loadMiddleware()
-    this.database = new Database()
+    this.database = db
   }
 
 

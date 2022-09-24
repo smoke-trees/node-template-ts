@@ -13,8 +13,13 @@ export class Settings implements SettingsInterface {
   pgPort: string;
   pgUser: string;
   interceptors: boolean;
+  syncDatabase: boolean; 
+  runMigrations: boolean; 
+  production: boolean;
+
 
   constructor() {
+    this.production = this.getValue('NODE_ENV') === 'production'
     this.port = this.getValue('PORT', '8080')
     this.interceptors = true
     this.connectionName = 'default'
@@ -23,6 +28,8 @@ export class Settings implements SettingsInterface {
     this.pgDatabase = this.getValue('PGDATABASE', 'postgres')
     this.pgPort = this.getValue('PGPORT', '5432')
     this.pgUser = this.getValue('PGUSER', 'postgres')
+    this.syncDatabase =  this.production ? false : true
+    this.runMigrations =  this.production ? true : false
   }
 
   getValue(key: string, defaultValue: string): string;

@@ -1,7 +1,6 @@
 import Database from "../../core/database";
+import { User } from "../../Example/users";
 
 export function clearUserTable(database: Database) {
-  return database.getConnection().then((connection) => {
-    return connection.getRepository("User").clear();
-  });
+  return database.getConnection().getRepository(User).clear()
 }

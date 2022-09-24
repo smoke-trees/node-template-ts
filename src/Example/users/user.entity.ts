@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {  Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { BaseEntity } from "../../core/BaseEntity";
 import { Validator } from "../../core/Validator";
 import { IUser } from "./IUser";

@@ -1,11 +1,11 @@
 import { assert } from "chai";
-import { UserService } from "../../../app/users";
 import Database from "../../../core/database";
+import { UserService } from "../../../Example/users";
 import { ErrorCode } from "../../../result";
 import { clearUserTable } from "../../utils/clear-database.test";
 
 
-export function UserServiceTest(database: Database, userService: UserService) {
+export function ExampleServiceTest(database: Database, userService: UserService) {
   describe("User service test", async function () {
     this.beforeEach(function () {
       clearUserTable(database)
