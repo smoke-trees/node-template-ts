@@ -4,15 +4,13 @@
   "description": "TypeScript version of our Node.js template",
   "main": "dist/index.js",
   "scripts": {
-    "build": "npm run lint && tsc",
-    "build-nolint": "tsc",
+    "build": "tsc",
     "test": "NODE_OPTIONS=--enable-source-maps mocha --exit --file dist/tests/index.test.js",
     "test-w": "set NODE_OPTIONS=--enable-source-maps && set CI=true && mocha --exit dist/tests/index.test.js",
     "watch": "tsc -w",
     "dev": "NODE_OPTIONS=--enable-source-maps nodemon -L -w ./dist -w ./src -w docs/build/docs.yaml dist/index.js",
     "dev-w": "set NODE_OPTIONS=--enable-source-maps && nodemon -L -w dist -w src dist/index.js",
     "start": "node dist/index.js",
-    "lint": "standardx **/*.ts --fix",
     "coverage": "tsc && nyc --reporter=lcov npm run test && codecov",
     "coverage-w": "tsc && nyc --reporter=lcov npm run test-w && codecov",
     "migration-generate": "typeorm migration:generate -d './dist/datasource.js'",
@@ -38,12 +36,6 @@
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": "error"
     }
-  },
-  "standardx": {
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint/eslint-plugin"
-    ]
   },
   "dependencies": {
     "@smoke-trees/postgres-backend": "^1.0.3",
@@ -77,7 +69,6 @@
     "eslint": "^8.23.0",
     "mocha": "^10.0.0",
     "nodemon": "^2.0.19",
-    "standardx": "^7.0.0",
     "typescript": "4.7.4"
   }
 }

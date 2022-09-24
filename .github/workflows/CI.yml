@@ -29,12 +29,15 @@ jobs:
         uses: harmon758/postgresql-action@v1
         with:
           postgresql version: '12'
-          postgresql db: 'testdb'
-          postgresql user: 'testuser'
-          postgresql password: 'testpassword'
+          postgresql db: 'postgres'
+          postgresql user: 'postgres'
+          postgresql password: 'mysecretpassword'
 
       - name: Fetch dependencies    
         run: npm ci
+
+      - name: Build
+        run: npm run build
 
       - name: Run tests and generate coverage report
         run: npm test
