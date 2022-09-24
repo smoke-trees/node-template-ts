@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { IResult, ErrorCode, getStatus } from '../result';
+import { IResult, ErrorCode, getStatus, Result } from '../result';
 import Application from "./app";
 import { BaseEntity, BaseEntityConstructor, createEntity } from "./BaseEntity";
 import Controller, { Methods, Route } from "./controller";
@@ -105,8 +105,8 @@ export abstract class ServiceController<Entity extends BaseEntity> extends Contr
     if (isNaN(countParsed)) {
       countParsed = 10
     }
-    let orderParsed: string = order?.toString() ?? "DESC"
-    if (order !== 'DESC' && order !== 'ASC') {
+    let orderParsed: string = order?.toString()?.toUpperCase() ?? "DESC"
+    if (orderParsed !== 'DESC' && orderParsed !== 'ASC') {
       orderParsed = 'DESC'
     }
     let result

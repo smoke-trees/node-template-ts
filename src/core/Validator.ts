@@ -11,9 +11,9 @@ export function defaultValidator(value: any): boolean {
 }
 
 export function Validator(options?: ValidatorOptions) {
-  const validatorOptions = options?.validatorFunction || defaultValidator
-  const required = options?.required || false
-  const updatable = options?.updatable || true
+  const validatorOptions = options?.validatorFunction ?? defaultValidator
+  const required = options?.required ?? false
+  const updatable = options?.updatable ?? true
   return function (target: Object, propertyKey: string | symbol) {
     Reflect.defineMetadata(`smoke:${propertyKey.toString()}:validator`, validatorOptions, target)
     Reflect.defineMetadata(`smoke:${propertyKey.toString()}:required`, required, target)

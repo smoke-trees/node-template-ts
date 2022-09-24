@@ -1,6 +1,6 @@
-import { Entity, EntityManager, EntityTarget, FindOneOptions, FindOptionsWhere } from "typeorm";
+import { Entity, EntityManager, EntityTarget, FindOneOptions, FindOptionsWhere, In } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
-import { IResult, ErrorCode } from "../result";
+import { IResult, ErrorCode, WithCount } from "../result";
 import { BaseEntity } from "./BaseEntity";
 import Database from "./database";
 import log from "./log";
@@ -138,14 +138,30 @@ export class Dao<Entity extends BaseEntity> {
     }
   }
 
+  private parseFilter (where: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[] {
+    if (where instanceof Array) {
+      where.forEach(()=> this.parseFilter(where) )
+    }
+    Object.keys(where).forEach(key=> {
+      if ((where as any)[key] instanceof Array) { 
+        (where as any)[key] = In((where as any)[key])
+      }
+    })
+    console.log(where)
+    return where
+  }
+
   async readMany(page = 1, count = 10, order: 'ASC' | 'DESC' = 'DESC', field: keyof Entity = 'createdAt',
-    where?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[], manager?: EntityManager): Promise<IResult<Entity[]>> {
+    where?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[], manager?: EntityManager): Promise<WithCount<IResult<Entity[]>>> {
     if (!manager) {
       manager = (await this.database.getConnection()).createEntityManager()
     }
     const repository = manager.getRepository(this.entity);
 
     try {
+      if (where) {
+        where = this.parseFilter(where)
+      }
       const orderValue: any = { [field]: order }
       const result = await repository.find({
         where,
@@ -153,14 +169,17 @@ export class Dao<Entity extends BaseEntity> {
         take: count,
         order: orderValue,
       });
-      log.debug("Successfully found", `${this.entityName}/readMany`, { page, count, order, field });
+      console.log(result, )
+      log.debug("Successfully found", `${this.entityName}/readMany`, { page, count, orderValue, field });
+      const totalCount = await repository.count({ where });
       return {
         status: {
           error: false,
           code: ErrorCode.Success
         },
         message: "Success in readMany",
-        result
+        result,
+        count: totalCount
       }
     } catch (error) {
       log.error("Error in reading", `${this.entityName}/readMany`, error, { page, count, order, field });
@@ -170,7 +189,8 @@ export class Dao<Entity extends BaseEntity> {
           code: ErrorCode.DatabaseError
         },
         message: "Error in reading ",
-        result: null
+        result: null,
+        count: null
       }
     }
   }

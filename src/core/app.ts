@@ -44,6 +44,8 @@ export default class Application extends RouteHandler {
     this.controllers.forEach((controller) => {
       this.app.use(controller.path, controller.setRoutes())
     })
+    this.app.use('/health', (req, res) => { res.status(200).json({ message: "Health is good" }) })
+    this.app.use('*', (req, res) => { res.status(404).json({ message: "Not Found" }) })
   }
 
   public addController(controller: Controller): void {
@@ -55,8 +57,6 @@ export default class Application extends RouteHandler {
     this.mw.push(morgan)
     this.mw.push(ContextProvider.getMiddleware({ headerName: 'X-Request-ID' }))
     this.mw.push(compression())
-    this.mw.push(express.json({ }))
+    this.mw.push(express.json({}))
   }
-
-  
 }

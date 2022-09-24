@@ -1,6 +1,6 @@
 import { FindOneOptions, FindOptionsWhere } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
-import { IResult } from "../result";
+import { IResult, Result, WithCount } from "../result";
 import { BaseEntity } from "./BaseEntity";
 import { Dao } from "./Dao";
 
@@ -22,7 +22,7 @@ export abstract class Service<Entity extends BaseEntity> implements IService<Ent
     return this.dao.read(filter)
   }
   readMany(page = 1, count = 10, order: 'ASC' | 'DESC' = 'DESC', field?: keyof Entity, where?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[])
-    : Promise<IResult<Entity[]>> {
+    : Promise<WithCount<IResult<Entity[]>>> {
     return this.dao.readMany(page, count, order, field, where)
   }
   readManyWithoutPagination(order: 'ASC' | 'DESC' = 'DESC', field?: keyof Entity, where?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]):
@@ -32,7 +32,17 @@ export abstract class Service<Entity extends BaseEntity> implements IService<Ent
   create(value: QueryDeepPartialEntity<Entity> | QueryDeepPartialEntity<Entity>[],): Promise<IResult<number | string>> {
     return this.dao.create(value)
   }
-  update(id: string | number | FindOptionsWhere<Entity>, values: QueryDeepPartialEntity<Entity>): Promise<IResult<number>> {
+  async update(id: string | number | FindOptionsWhere<Entity>, values: QueryDeepPartialEntity<Entity>): Promise<IResult<number>> {
+    let filter: string | number | FindOneOptions<Entity>
+    if (typeof id === 'string' || typeof id === 'number') {
+      filter = id
+    } else {
+      filter = { where: id }
+    }
+    const read = await this.readOne(filter)
+    if (read.status.error) {
+      return new Result({ code: read.status.code, error: true }, read.message, 0)
+    }
     return this.dao.update(id, values)
   }
   delete(id: string | number | string[] | FindOptionsWhere<Entity>): Promise<IResult<number>> {
