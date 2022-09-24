@@ -20,7 +20,7 @@ export class Dao<Entity extends BaseEntity> {
   }
   async create(value: QueryDeepPartialEntity<Entity> | QueryDeepPartialEntity<Entity>[], manager?: EntityManager): Promise<IResult<number | string>> {
     if (!manager) {
-      manager = (await this.database.getConnection()).createEntityManager()
+      manager = (this.database.getConnection()).createEntityManager()
     }
     const repository = manager.getRepository(this.entity);
     try {
@@ -52,7 +52,7 @@ export class Dao<Entity extends BaseEntity> {
 
   async read(value: string | number | FindOneOptions<Entity>, manager?: EntityManager): Promise<IResult<Entity>> {
     if (!manager) {
-      manager = (await this.database.getConnection()).createEntityManager()
+      manager = (this.database.getConnection()).createEntityManager()
     }
     const repository = manager.getRepository(this.entity);
     try {
@@ -99,7 +99,7 @@ export class Dao<Entity extends BaseEntity> {
   async update(id: string | number | FindOptionsWhere<Entity>, values: QueryDeepPartialEntity<Entity>, manager?: EntityManager): Promise<IResult<number>> {
 
     if (!manager) {
-      manager = (await this.database.getConnection()).createEntityManager()
+      manager = (this.database.getConnection()).createEntityManager()
     }
     const repository = manager.getRepository(this.entity);
     let copy = { ...values };
@@ -138,12 +138,12 @@ export class Dao<Entity extends BaseEntity> {
     }
   }
 
-  private parseFilter (where: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[] {
+  private parseFilter(where: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[]): FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[] {
     if (where instanceof Array) {
-      where.forEach(()=> this.parseFilter(where) )
+      where.forEach(() => this.parseFilter(where))
     }
-    Object.keys(where).forEach(key=> {
-      if ((where as any)[key] instanceof Array) { 
+    Object.keys(where).forEach(key => {
+      if ((where as any)[key] instanceof Array) {
         (where as any)[key] = In((where as any)[key])
       }
     })
@@ -154,7 +154,7 @@ export class Dao<Entity extends BaseEntity> {
   async readMany(page = 1, count = 10, order: 'ASC' | 'DESC' = 'DESC', field: keyof Entity = 'createdAt',
     where?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[], manager?: EntityManager): Promise<WithCount<IResult<Entity[]>>> {
     if (!manager) {
-      manager = (await this.database.getConnection()).createEntityManager()
+      manager = (this.database.getConnection()).createEntityManager()
     }
     const repository = manager.getRepository(this.entity);
 
@@ -169,7 +169,7 @@ export class Dao<Entity extends BaseEntity> {
         take: count,
         order: orderValue,
       });
-      console.log(result, )
+      console.log(result,)
       log.debug("Successfully found", `${this.entityName}/readMany`, { page, count, orderValue, field });
       const totalCount = await repository.count({ where });
       return {
@@ -198,7 +198,7 @@ export class Dao<Entity extends BaseEntity> {
   async readManyWithoutPagination(order: 'ASC' | 'DESC' = 'DESC', field: keyof Entity = 'createdAt', where?: FindOptionsWhere<Entity> | FindOptionsWhere<Entity>[], manager?: EntityManager)
     : Promise<IResult<Entity[]>> {
     if (!manager) {
-      manager = (await this.database.getConnection()).createEntityManager()
+      manager = (this.database.getConnection()).createEntityManager()
     }
     const repository = manager.getRepository(this.entity);
 
@@ -244,7 +244,7 @@ export class Dao<Entity extends BaseEntity> {
 
   async delete(id: string | number | string[] | FindOptionsWhere<Entity>, manager?: EntityManager): Promise<IResult<number>> {
     if (!manager) {
-      manager = (await this.database.getConnection()).createEntityManager()
+      manager = (this.database.getConnection()).createEntityManager()
     }
     const repository = manager.getRepository(this.entity);
     try {
@@ -282,44 +282,4 @@ export class Dao<Entity extends BaseEntity> {
       }
     }
   }
-
-
-  // async exists(id: string | number | FindOptionsWhere<Entity>, manager?: EntityManager): Promise<IResult<boolean>> {
-  //   if (!manager) {
-  //     manager = (await this.database.getConnection()).createEntityManager()
-  //   }
-
-  //   const isExistsQuery = (query: string) =>
-  //     `SELECT EXISTS(${query}) AS "exists"`;
-  //   try {
-  //     const [{ exists }] = await manager.query(
-  //       isExistsQuery(
-  //         manager
-  //           .createQueryBuilder()
-  //           .select('*')
-  //           .from(this.entity, 'tbl')
-  //           .where('tbl.id = ?')
-  //           .getQuery(),
-  //       ), [id]);
-
-  //     return {
-  //       status: {
-  //         error: false,
-  //         code: ErrorCodes.Success
-  //       },
-  //       message: "Success in exists",
-  //       result: exists
-  //     }
-
-  //   } catch (error) {
-  //     return {
-  //       status: {
-  //         error: true,
-  //         code: ErrorCodes.DatabaseError
-  //       },
-  //       message: "Error in exists",
-  //       result: null
-  //     }
-  //   }
-  // }
 }
