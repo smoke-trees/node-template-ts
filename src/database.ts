@@ -5,6 +5,7 @@ import settings from './settings'
 
 const database = new Database(settings)
 
+
 // Add Entities
 
 database.addEntity(User)
