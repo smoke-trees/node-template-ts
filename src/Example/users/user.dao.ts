@@ -1,5 +1,4 @@
-import { Dao } from "../../core/Dao";
-import Database from "../../core/database";
+import { Dao, Database } from "@smoke-trees/postgres-backend";
 import { User } from "./user.entity";
 
 export class UserDao extends Dao<User> {

@@ -1,7 +1,5 @@
-import { RequestHandler, Request, Response } from 'express'
-import Application from '../core/app'
-import Controller, { Route, Methods } from '../core/controller'
-import log from '../core/log'
+import { Application, Controller, log, Methods, Route } from '@smoke-trees/postgres-backend';
+import { Request, RequestHandler, Response } from 'express';
 
 export default class TestController extends Controller {
   public path = '/';

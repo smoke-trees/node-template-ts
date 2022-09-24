@@ -1,4 +1,4 @@
-import { Service } from "../../core/Service";
+import { Service } from "@smoke-trees/postgres-backend";
 import { UserDao } from "./user.dao";
 import { User } from "./user.entity";
 

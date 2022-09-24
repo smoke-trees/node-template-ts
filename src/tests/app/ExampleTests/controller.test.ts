@@ -1,7 +1,6 @@
-import Application from "../../../core/app";
+import { Application, ErrorCode } from '@smoke-trees/postgres-backend';
 import chai, { assert } from 'chai'
 import chaiHttp from 'chai-http'
-import { ErrorCode } from "../../../result";
 import { clearUserTable } from "../../utils/clear-database.test";
 
 chai.use(chaiHttp)

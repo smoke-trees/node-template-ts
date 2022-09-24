@@ -1,4 +1,4 @@
-import Application from './core/app'
+import { Application } from '@smoke-trees/postgres-backend'
 import database from './database'
 import settings from './settings'
 

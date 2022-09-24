@@ -1,6 +1,5 @@
-import {  Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { BaseEntity } from "../../core/BaseEntity";
-import { Validator } from "../../core/Validator";
+import { BaseEntity, Validator } from '@smoke-trees/postgres-backend';
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { IUser } from "./IUser";
 
 @Entity({ name: 'user_test_table' })

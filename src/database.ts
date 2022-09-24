@@ -1,6 +1,5 @@
+import { Database } from '@smoke-trees/postgres-backend'
 import './config'
-import Database from './core/database'
-import { Settings } from './core/settings'
 import { User } from './Example/users'
 import settings from './settings'
 

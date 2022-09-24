@@ -1,7 +1,6 @@
+import { Database, ErrorCode } from "@smoke-trees/postgres-backend";
 import { assert } from "chai";
-import Database from "../../../core/database";
 import { UserService } from "../../../Example/users";
-import { ErrorCode } from "../../../result";
 import { clearUserTable } from "../../utils/clear-database.test";
 
 
