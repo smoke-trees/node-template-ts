@@ -1,30 +1,28 @@
 import express, { Application as ExpressApplication, RequestHandler } from 'express'
 import { Server } from 'http'
-import compression from 'compression'
-import cors from 'cors'
-import { ContextProvider } from '@smoke-trees/smoke-context'
-import morgan from './morgan'
 import log from './log'
 import Controller from './controller'
 import RouteHandler from './RouteHandler'
 import Database from './database'
+import { Settings } from './settings'
 
 export default class Application extends RouteHandler {
   private readonly app: ExpressApplication
   private readonly controllers: Controller[];
   protected readonly port: string;
   protected mw: RequestHandler[];
+  public settings: Settings;
   public database: Database;
 
-  constructor(db: Database = new Database(true)) {
+  constructor(settings: Settings = new Settings(), db: Database = new Database(settings, true)) {
     const app = express()
     super(app)
     this.app = app
+    this.settings = settings
     this.port = process.env.PORT || '8080'
     this.controllers = []
     this.mw = []
     this.setMiddleware()
-    this.loadMiddleware()
     this.database = db
   }
 
@@ -51,11 +49,7 @@ export default class Application extends RouteHandler {
     this.controllers.push(controller)
   }
 
-  public setMiddleware(): void {
-    this.mw.push(cors())
-    this.mw.push(morgan)
-    this.mw.push(ContextProvider.getMiddleware({ headerName: 'X-Request-ID' }))
-    this.mw.push(compression())
-    this.mw.push(express.json({}))
+  public addMiddleWare(...middleware: RequestHandler[]): void {
+    this.mw.push(...middleware)
   }
 }

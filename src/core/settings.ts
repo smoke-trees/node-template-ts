@@ -38,4 +38,3 @@ export class Settings implements SettingsInterface {
     return (process.env[key] ?? defaultValue)
   }
 }
-export default new Settings()

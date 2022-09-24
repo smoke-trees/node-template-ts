@@ -1,6 +1,6 @@
 import { DataSource, DataSourceOptions, EntitySchema, MixedList } from 'typeorm';
 import log from './log';
-import settings from './settings';
+import { Settings } from './settings';
 class Database {
   private _connection!: DataSource;
   public get connection(): DataSource {
@@ -9,11 +9,13 @@ class Database {
   private _ready: Promise<boolean>
   private entities: MixedList<Function | string | EntitySchema> = []
   private migrations: MixedList<Function | string> = []
+  private settings: Settings
   get ready(): Promise<boolean> {
     return this._ready
   }
 
-  constructor(connect = false) {
+  constructor(settings: Settings, connect = false,) {
+    this.settings = settings
     if (connect) {
       this._ready = this.connect()
     } else {
@@ -52,16 +54,16 @@ class Database {
   getConfig(): DataSourceOptions {
     const config: DataSourceOptions = {
       type: 'postgres',
-      port: parseInt(settings.pgPort),
-      name: settings.connectionName,
-      database: settings.pgDatabase,
-      host: settings.pgHost,
-      username: settings.pgUser,
-      password: settings.pgPassword,
+      port: parseInt(this.settings.pgPort),
+      name: this.settings.connectionName,
+      database: this.settings.pgDatabase,
+      host: this.settings.pgHost,
+      username: this.settings.pgUser,
+      password: this.settings.pgPassword,
       entities: this.entities,
       migrations: this.migrations,
-      synchronize: settings.syncDatabase,
-      migrationsRun: settings.runMigrations,
+      synchronize: this.settings.syncDatabase,
+      migrationsRun: this.settings.runMigrations,
       logging: ['error', 'migration']
     }
     return config
