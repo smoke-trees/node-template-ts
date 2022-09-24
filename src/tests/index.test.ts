@@ -17,7 +17,7 @@ app.addMiddleWare(ContextProvider.getMiddleware({ headerName: 'X-Request-ID' }))
 app.addMiddleWare(compression())
 app.addMiddleWare(express.json({}))
 
-const userDao = new UserDao(app.database)
+const userDao = new UserDao(database)
 const userService = new UserService(userDao)
 const userController = new UserController(app, userService);
 
@@ -31,10 +31,10 @@ describe("Test Suite", function () {
   before(async function () {
     await database.connect()
     console.log(await database.ready)
-    clearUserTable(app.database)
+    clearUserTable(database)
   });
   after(function () { });
 
-  ExampleServiceTest(app.database, userService)
+  ExampleServiceTest(database, userService)
   ExampleControllerTest(app)
 })

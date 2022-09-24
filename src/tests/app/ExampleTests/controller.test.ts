@@ -8,7 +8,7 @@ chai.use(chaiHttp)
 export function ExampleControllerTest(app: Application) {
   describe("Example controller test", async function () {
     this.beforeEach(async function () {
-      await clearUserTable(app.database);
+      await clearUserTable(app.database!);
     })
     it("Create User", async function () {
       const response = await chai.request(app.getApp()).post('/user').send({ name: 'Anshuman' })
