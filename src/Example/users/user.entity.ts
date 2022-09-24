@@ -11,10 +11,10 @@ export class User extends BaseEntity implements IUser {
   @Validator({ required: true, updatable: true })
   name!: string;
 
-  constructor(it: Partial<IUser>) {
-    super();
+  constructor(it?: IUser) {
+    super()
     if (it) {
-      this.name = it.name!;
+      this.name = it.name
     }
   }
 }

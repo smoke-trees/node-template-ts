@@ -1,4 +1,4 @@
-import { Controller, ServiceController, Application } from '@smoke-trees/postgres-backend';
+import { Application, Controller, ServiceController } from '@smoke-trees/postgres-backend';
 import { RequestHandler } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
@@ -11,7 +11,7 @@ export class UserController extends ServiceController<User>  {
   protected mw: RequestHandler<ParamsDictionary, any, any, ParsedQs, Record<string, any>>[];
   public service: UserService;
   constructor(app: Application, userService: UserService) {
-    super(app, User, userService, { paths: {} });
+    super(app, User, userService, { paths: {} })
     this.service = userService;
     this.controllers = [];
     this.mw = []
