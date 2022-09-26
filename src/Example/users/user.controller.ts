@@ -1,4 +1,4 @@
-import { Application, Controller, ServiceController } from '@smoke-trees/postgres-backend';
+import { Application, Controller, Documentation, Methods, ServiceController } from '@smoke-trees/postgres-backend';
 import { RequestHandler } from "express";
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
@@ -16,5 +16,22 @@ export class UserController extends ServiceController<User>  {
     this.controllers = [];
     this.mw = []
     this.loadDocumentation()
+  }
+
+  @Documentation.addRoute({
+    path: "/user",
+    method: Methods.POST,
+    description: '123',
+    summary: "Get all users",
+    requestBody: { $ref: Documentation.getRef(User),  },
+    responses: {
+      200: {
+        description: "Success",
+        value: { $ref: Documentation.getRef(User) }
+      }
+    },
+  })
+  public handleException1() {
+
   }
 }
