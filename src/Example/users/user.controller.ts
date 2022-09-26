@@ -15,5 +15,6 @@ export class UserController extends ServiceController<User>  {
     this.service = userService;
     this.controllers = [];
     this.mw = []
+    this.loadDocumentation()
   }
 }
