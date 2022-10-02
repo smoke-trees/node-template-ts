@@ -2,6 +2,7 @@ import { Application, Documentation } from '@smoke-trees/postgres-backend'
 import database from './database'
 import { UserController, UserDao, UserService } from './Example/users'
 import settings from './settings'
+import swaggerUiExpress from 'swagger-ui-express'
 
 const app = new Application(settings, database)
 
@@ -11,7 +12,6 @@ const userController = new UserController(app, userService)
 
 app.addController(userController)
 
-app.loadControllers()
 
 
 Documentation.addServers([{
@@ -30,6 +30,12 @@ Documentation.addInfo({
   version: '1.0.0'
 })
 
-console.log(JSON.stringify(Documentation.getAPIJson()))
+//console.log(JSON.stringify(Documentation.getAPIJson()))
+//
+
+app.getApp().use('/docs', swaggerUiExpress.serveWithOptions({ cacheControl: true, maxAge: 64800 }))
+app.getApp().get('/docs', swaggerUiExpress.setup(Documentation.getAPIJson()))
+
+app.loadControllers()
 
 app.run()
