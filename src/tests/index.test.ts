@@ -1,7 +1,7 @@
 import compression from 'compression'
 import express from 'express'
 import { ContextProvider } from '@smoke-trees/smoke-context'
-import { User, UserController, UserDao, UserService } from "../Example/users";
+import { User, UserController, UserDao, UserService } from "../app/users";
 import { ExampleControllerTest } from "./app/ExampleTests/controller.test";
 import { ExampleServiceTest } from "./app/ExampleTests/services.test";
 import { clearUserTable } from "./utils/clear-database.test";

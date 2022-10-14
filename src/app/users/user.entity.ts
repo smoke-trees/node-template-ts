@@ -1,5 +1,5 @@
 import { BaseEntity, Database, Documentation, Validator } from '@smoke-trees/postgres-backend';
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { BaseUser } from './baseUserEntity';
 import { IUser } from "./IUser";
 
@@ -15,10 +15,15 @@ export class User extends BaseUser implements IUser {
   @Documentation.addField({ type: 'string', minLength: 3, maxLength: 255 })
   name!: string;
 
+  @Column('date', { name: 'date_of_birth', nullable: true })
+  @Documentation.addField({ type: 'string', format: 'date', nullable: true })
+  dateOfBirth!: Date | null;
+
   constructor(it?: IUser) {
-    super()
+    super(it)
     if (it) {
       this.name = it.name
+      this.dateOfBirth = it.dateOfBirth
     }
   }
 }

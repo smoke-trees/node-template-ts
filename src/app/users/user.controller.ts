@@ -11,7 +11,7 @@ export class UserController extends ServiceController<User>  {
   protected mw: RequestHandler<ParamsDictionary, any, any, ParsedQs, Record<string, any>>[];
   public service: UserService;
   constructor(app: Application, userService: UserService) {
-    super(app, User, userService, { paths: {} })
+    super(app, User, userService)
     this.service = userService;
     this.controllers = [];
     this.mw = []
@@ -23,7 +23,7 @@ export class UserController extends ServiceController<User>  {
     method: Methods.POST,
     description: '123',
     summary: "Get all users",
-    requestBody: { $ref: Documentation.getRef(User),  },
+    requestBody: { $ref: Documentation.getRef(User), },
     responses: {
       200: {
         description: "Success",
@@ -32,6 +32,5 @@ export class UserController extends ServiceController<User>  {
     },
   })
   public handleException1() {
-
   }
 }
