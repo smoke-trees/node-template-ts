@@ -6,11 +6,11 @@ import { clearUserTable } from "../../utils/clear-database.test";
 chai.use(chaiHttp)
 
 export function ExampleControllerTest(app: Application) {
-  describe("Example controller test", async function () {
-    this.beforeEach(async function () {
+  describe("Example controller test", async function() {
+    this.beforeEach(async function() {
       await clearUserTable(app.database!);
     })
-    it("Create User", async function () {
+    it("Create User", async function() {
       const response = await chai.request(app.getApp()).post('/user').send({ name: 'Anshuman' })
       assert.equal(response.status, 201)
       assert.exists(response.body)
@@ -19,7 +19,7 @@ export function ExampleControllerTest(app: Application) {
       assert.equal(response.body.status.code, ErrorCode.Created)
       assert.isFalse(response.body.status.error)
     })
-    it("Create User - No name parameter", async function () {
+    it("Create User - No name parameter", async function() {
       const response = await chai.request(app.getApp()).post('/user').send({ name1: 'Anshuman' })
       assert.equal(response.status, 400)
       assert.exists(response.body)
@@ -27,7 +27,7 @@ export function ExampleControllerTest(app: Application) {
       assert.equal(response.body.status.code, ErrorCode.BadRequest)
       assert.isTrue(response.body.status.error)
     })
-    it("Read User", async function () {
+    it("Read User", async function() {
       const createResponse = await chai.request(app.getApp()).post('/user').send({ name: 'Anshuman' })
       const response = await chai.request(app.getApp()).get(`/user/${createResponse.body.result}`)
       assert.equal(response.status, 200)
@@ -37,7 +37,7 @@ export function ExampleControllerTest(app: Application) {
       assert.isFalse(response.body.status.error)
       assert.equal(response.body.result.name, 'Anshuman')
     })
-    it("Read User - Not Found", async function () {
+    it("Read User - Not Found", async function() {
       const createResponse = await chai.request(app.getApp()).post('/user').send({ name: 'Anshuman' })
       const response = await chai.request(app.getApp()).get(`/user/${createResponse.body.result}1`)
       assert.equal(response.status, 404)
@@ -46,7 +46,7 @@ export function ExampleControllerTest(app: Application) {
       assert.equal(response.body.status.code, ErrorCode.NotFound)
       assert.isTrue(response.body.status.error)
     })
-    it("Update User", async function () {
+    it("Update User", async function() {
       const createResponse = await chai.request(app.getApp()).post('/user').send({ name: 'Anshuman' })
       const updateResponse = await chai.request(app.getApp()).put(`/user/${createResponse.body.result}`).send({ name: 'Anshuman1' })
       assert.equal(updateResponse.status, 200)
@@ -62,7 +62,7 @@ export function ExampleControllerTest(app: Application) {
       assert.isFalse(response.body.status.error)
       assert.equal(response.body.result.name, 'Anshuman1')
     })
-    it("Update User - not found", async function () {
+    it("Update User - not found", async function() {
       const createResponse = await chai.request(app.getApp()).post('/user').send({ name: 'Anshuman' })
       const updateResponse = await chai.request(app.getApp()).put(`/user/${createResponse.body.result}1`).send({ name: 'Anshuman1' })
       assert.equal(updateResponse.status, 404)
@@ -78,7 +78,7 @@ export function ExampleControllerTest(app: Application) {
       assert.isFalse(response.body.status.error)
       assert.equal(response.body.result.name, 'Anshuman')
     })
-    it("Delete User - not found", async function () {
+    it("Delete User - not found", async function() {
       const createResponse = await chai.request(app.getApp()).post('/user').send({ name: 'Anshuman' })
       const updateResponse = await chai.request(app.getApp()).delete(`/user/${createResponse.body.result}1`).send({ name: 'Anshuman1' })
       assert.equal(updateResponse.status, 404)
@@ -94,7 +94,7 @@ export function ExampleControllerTest(app: Application) {
       assert.isFalse(response.body.status.error)
       assert.equal(response.body.result.name, 'Anshuman')
     })
-    it("Delete User ", async function () {
+    it("Delete User ", async function() {
       const createResponse = await chai.request(app.getApp()).post('/user').send({ name: 'Anshuman' })
       const updateResponse = await chai.request(app.getApp()).delete(`/user/${createResponse.body.result}`).send({ name: 'Anshuman1' })
       assert.equal(updateResponse.status, 200)
@@ -109,7 +109,7 @@ export function ExampleControllerTest(app: Application) {
       assert.equal(response.body.status.code, ErrorCode.NotFound)
       assert.isTrue(response.body.status.error)
     })
-    it("Read Many - Pages", async function () {
+    it("Read Many - Pages", async function() {
       for (let i = 0; i < 12; i++) {
         await chai.request(app.getApp()).post('/user').send({ name: `Anshuman${i}` })
       }
@@ -135,7 +135,7 @@ export function ExampleControllerTest(app: Application) {
       assert.isFalse(result4.body.status.error)
       assert.equal(result4.body.status.code, ErrorCode.Success)
     })
-    it("Read Many - Filter", async function () {
+    it("Read Many - Filter", async function() {
       const users = []
       for (let i = 0; i < 12; i++) {
         users.push(await chai.request(app.getApp()).post('/user').send({ name: `Anshuman${i}` }))
@@ -153,7 +153,7 @@ export function ExampleControllerTest(app: Application) {
       assert.equal(result2.body.status.code, ErrorCode.Success)
       assert.equal(result2.body.result[0].name, 'Anshuman0')
     })
-    it("Read Many - NonPaginated", async function () {
+    it("Read Many - NonPaginated", async function() {
       const users = []
       for (let i = 0; i < 12; i++) {
         users.push(await chai.request(app.getApp()).post('/user').send({ name: `Anshuman${i}` }))

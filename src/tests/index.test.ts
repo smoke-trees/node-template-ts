@@ -27,13 +27,13 @@ app.loadMiddleware()
 app.loadControllers()
 
 
-describe("Test Suite", function () {
-  before(async function () {
+describe("Test Suite", function() {
+  before(async function() {
     await database.connect()
     console.log(await database.ready)
     clearUserTable(database)
   });
-  after(function () { });
+  after(function() { });
 
   ExampleServiceTest(database, userService)
   ExampleControllerTest(app)

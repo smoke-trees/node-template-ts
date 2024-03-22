@@ -1,3 +1,3 @@
-import { defaultLogger } from "@smoke-trees/postgres-backend";
+import { log as defaultLogger } from "@smoke-trees/postgres-backend";
 
 export const log = defaultLogger
