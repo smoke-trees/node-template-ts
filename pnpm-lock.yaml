@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@smoke-trees/postgres-backend':
-    specifier: ^2.3.0
-    version: 2.3.0
+    specifier: ^2.3.1
+    version: 2.3.1
   '@smoke-trees/smoke-context':
     specifier: ^1.4.8
     version: 1.4.8
@@ -86,7 +86,7 @@ devDependencies:
     specifier: ^9.1.0
     version: 9.1.0
   chai:
-    specifier: '4'
+    specifier: ^4.4.1
     version: 4.4.1
   eslint:
     specifier: ^8.57.0
@@ -246,8 +246,8 @@ packages:
     dev: false
     optional: true
 
-  /@smoke-trees/postgres-backend@2.3.0:
-    resolution: {integrity: sha512-RSTFRFz0SVpmLJBJ6fGxAIvhEEIYcR4St7GrYzHwdmyeKbdoSKWYnGL5IPh4afEBSXhcaWxvyYtdWzzK0h+wyw==}
+  /@smoke-trees/postgres-backend@2.3.1:
+    resolution: {integrity: sha512-5EZV0FyvnEmthqZN345hYsaCFdDZmvUQmFE4y5549RddV5B0CO6Ttgk8kDNNBFCkVCUlTBL2AIyeXjRN6Qg+Ww==}
     dependencies:
       '@smoke-trees/smoke-context': 1.4.8
       compression: 1.7.4
@@ -1478,7 +1478,7 @@ packages:
       dezalgo: 1.0.4
       hexoid: 1.0.0
       once: 1.4.0
-      qs: 6.11.0
+      qs: 6.12.0
     dev: false
 
   /forwarded@0.2.0:
@@ -2666,7 +2666,7 @@ packages:
       formidable: 2.1.2
       methods: 1.1.2
       mime: 2.6.0
-      qs: 6.11.0
+      qs: 6.12.0
       semver: 7.6.0
     transitivePeerDependencies:
       - supports-color
