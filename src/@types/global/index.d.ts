@@ -1,4 +1,4 @@
-import { ContextType } from '@smoke-trees/smoke-context'
+import { ContextType } from "@smoke-trees/smoke-context";
 
 declare global {
   namespace Express {
@@ -8,4 +8,4 @@ declare global {
   }
 }
 
-export {}
+export {};

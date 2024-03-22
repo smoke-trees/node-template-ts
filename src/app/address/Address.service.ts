@@ -3,12 +3,10 @@ import { Address } from "./Address.entity";
 import { AddressDao } from "./Address.dao";
 
 export class AddressService extends Service<Address> {
-
-  dao: AddressDao
+  dao: AddressDao;
 
   constructor(dao: AddressDao) {
-    super(dao)
-    this.dao = dao
+    super(dao);
+    this.dao = dao;
   }
-
 }
