@@ -3,7 +3,7 @@ import {
   Documentation,
   Validator,
 } from "@smoke-trees/postgres-backend";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column } from "typeorm";
 import { IUser } from "./IUser";
 
 // @Entity({ name: 'user_test_table' })
