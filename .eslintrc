@@ -12,7 +12,8 @@
 		"no-unused-vars": "off",
 		"camelcase": "off",
 		"@typescript-eslint/no-unused-vars": "error",
-		"@typescript-eslint/camelcase": "off"
+		"@typescript-eslint/camelcase": "off",
+		"no-console": "error"
 	},
 	"env": {
 		"node": true
