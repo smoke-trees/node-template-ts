@@ -1,21 +1,20 @@
 {
-  "root": true,
-  "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint"
-  ],
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
-  ],
-  "rules": {
-    "no-unused-vars": "off",
-    "camelcase": "off",
-    "@typescript-eslint/no-unused-vars": "error",
-    "@typescript-eslint/camelcase": "off"
-  },
-  env: {
-    node: true
-  }
+	"root": true,
+	"parser": "@typescript-eslint/parser",
+	"plugins": ["@typescript-eslint"],
+	"extends": [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/eslint-recommended",
+		"plugin:@typescript-eslint/recommended",
+		"prettier"
+	],
+	"rules": {
+		"no-unused-vars": "off",
+		"camelcase": "off",
+		"@typescript-eslint/no-unused-vars": "error",
+		"@typescript-eslint/camelcase": "off"
+	},
+	"env": {
+		"node": true
+	}
 }
