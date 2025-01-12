@@ -1,10 +1,10 @@
-import { DataSource } from "typeorm";
-import database from "./database";
+import { DataSource } from 'typeorm'
+import database from './database'
 
 const dataSource = new DataSource({
-  ...database.getConfig(),
-  synchronize: false,
-  migrationsRun: true,
-});
+	...database.getConfig(),
+	synchronize: false,
+	migrationsRun: true
+})
 
-export default dataSource;
+export default dataSource

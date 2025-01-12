@@ -1,78 +1,81 @@
 {
-  "name": "template-ts",
-  "version": "3.0.0",
-  "description": "TypeScript version of our Node.js template",
-  "main": "dist/index.js",
-  "scripts": {
-    "build": "tsc",
-    "test": "NODE_OPTIONS=--enable-source-maps mocha --exit --file dist/tests/index.test.js",
-    "test-w": "set NODE_OPTIONS=--enable-source-maps && set CI=true && mocha --exit dist/tests/index.test.js",
-    "lint": "eslint src/**/*.ts",
-    "watch": "tsc -w",
-    "dev": "NODE_OPTIONS=--enable-source-maps nodemon -L -w ./dist -w ./src -w docs/build/docs.yaml dist/index.js",
-    "dev-w": "set NODE_OPTIONS=--enable-source-maps && nodemon -L -w dist -w src dist/index.js",
-    "start": "node dist/index.js",
-    "coverage": "c8 --all --reporter=lcov npm run test",
-    "coverage-w": "tsc && nyc --reporter=lcov npm run test-w && codecov",
-    "migration-generate": "typeorm migration:generate -d './dist/datasource.js'",
-    "migration-create": "typeorm migration:create"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/smoke-trees/node-template-ts.git"
-  },
-  "keywords": [
-    "nodejs",
-    "template",
-    "typescript"
-  ],
-  "author": "SmokeTrees",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/smoke-trees/node-template-ts/issues"
-  },
-  "homepage": "https://github.com/smoke-trees/node-template-ts#readme",
-  "eslintConfig": {
-    "rules": {
-      "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": "error"
-    }
-  },
-  "dependencies": {
-    "@smoke-trees/postgres-backend": "^2.3.3",
-    "@smoke-trees/smoke-context": "^1.4.8",
-    "chai-http": "^4.4.0",
-    "compression": "^1.7.4",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.1",
-    "morgan": "^1.10.0",
-    "pg": "^8.11.3",
-    "swagger-ui-express": "^5.0.0",
-    "typeorm": "0.3.20",
-    "winston": "^3.12.0",
-    "yamljs": "^0.3.0"
-  },
-  "devDependencies": {
-    "@types/chai": "^4.3.14",
-    "@types/compression": "^1.7.5",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
-    "@types/mocha": "^10.0.6",
-    "@types/morgan": "^1.9.9",
-    "@types/pg": "^8.11.4",
-    "@types/supertest": "^6.0.2",
-    "@types/swagger-ui-express": "^4.1.6",
-    "@types/yamljs": "^0.2.34",
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
-    "@typescript-eslint/parser": "^7.3.1",
-    "c8": "^9.1.0",
-    "chai": "^4.4.1",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "mocha": "^10.3.0",
-    "nodemon": "^3.1.0",
-    "prettier": "^3.2.5",
-    "typescript": "^5.4.3"
-  }
+	"name": "template-ts",
+	"version": "3.0.0",
+	"description": "TypeScript version of our Node.js template",
+	"main": "dist/index.js",
+	"scripts": {
+		"build": "tsc",
+		"test": "NODE_OPTIONS=--enable-source-maps mocha --exit --file dist/tests/index.test.js",
+		"test-w": "set NODE_OPTIONS=--enable-source-maps && set CI=true && mocha --exit dist/tests/index.test.js",
+		"lint": "eslint src/**/*.ts",
+		"watch": "tsc -w",
+		"dev": "NODE_OPTIONS=--enable-source-maps nodemon -L -w ./dist -w ./src -w docs/build/docs.yaml dist/index.js",
+		"dev-w": "set NODE_OPTIONS=--enable-source-maps && nodemon -L -w dist -w src dist/index.js",
+		"start": "node dist/index.js",
+		"coverage": "c8 --all --reporter=lcov npm run test",
+		"coverage-w": "tsc && nyc --reporter=lcov npm run test-w && codecov",
+		"migration-generate": "typeorm migration:generate -d './dist/datasource.js'",
+		"migration-create": "typeorm migration:create"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/smoke-trees/node-template-ts.git"
+	},
+	"keywords": [
+		"nodejs",
+		"template",
+		"typescript"
+	],
+	"author": "SmokeTrees",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/smoke-trees/node-template-ts/issues"
+	},
+	"homepage": "https://github.com/smoke-trees/node-template-ts#readme",
+	"eslintConfig": {
+		"rules": {
+			"no-unused-vars": "off",
+			"@typescript-eslint/no-unused-vars": "error"
+		}
+	},
+	"dependencies": {
+		"@smoke-trees/postgres-backend": "~2.4.2",
+		"@smoke-trees/smoke-context": "^1.5.4",
+		"chai-http": "^5.1.1",
+		"compression": "^1.7.5",
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.7",
+		"express": "^4.21.2",
+		"morgan": "^1.10.0",
+		"pg": "^8.13.1",
+		"swagger-ui-express": "^5.0.1",
+		"typeorm": "0.3.20",
+		"winston": "^3.17.0",
+		"yamljs": "^0.3.0"
+	},
+	"devDependencies": {
+		"@types/chai": "^5.0.1",
+		"@types/compression": "^1.7.5",
+		"@types/cors": "^2.8.17",
+		"@types/express": "^4.17.21",
+		"@types/mocha": "^10.0.10",
+		"@types/morgan": "^1.9.9",
+		"@types/node": "^22.10.5",
+		"@types/pg": "^8.11.10",
+		"@types/qs": "^6.9.17",
+		"@types/superagent": "^8.1.9",
+		"@types/supertest": "^6.0.2",
+		"@types/swagger-ui-express": "^4.1.7",
+		"@types/yamljs": "^0.2.34",
+		"@typescript-eslint/eslint-plugin": "^8.19.1",
+		"@typescript-eslint/parser": "^8.19.1",
+		"c8": "^10.1.3",
+		"chai": "^5.1.2",
+		"eslint": "^9.18.0",
+		"eslint-config-prettier": "^9.1.0",
+		"mocha": "^11.0.1",
+		"nodemon": "^3.1.9",
+		"prettier": "^3.4.2",
+		"typescript": "^5.7.3"
+	}
 }
