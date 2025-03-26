@@ -1,10 +1,11 @@
 lowercase=$(echo "$1" | tr '[:upper:]' '[:lower:]')
-mkdir "./src/app/$1"
-touch "./src/app/$1/I$1.ts"
+path=${2:-'./src/app/'}
+mkdir "$path$1"
+touch "$path$1/I$1.ts"
 
 echo "export interface I$1 {
     id: string;
-}" > "./src/app/$1/I$1.ts"
+}" > "$path$1/I$1.ts"
 echo "
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity, Documentation } from '@smoke-trees/postgres-backend';
@@ -23,7 +24,7 @@ export class $1 extends BaseEntity implements I$1 {
           if(data.id) this.id = data.id;
         }
     }
-}" > "./src/app/$1/$1.entity.ts"
+}" > "$path$1/$1.entity.ts"
 
 echo "
 import { Dao, Database } from '@smoke-trees/postgres-backend';
@@ -34,7 +35,7 @@ export class $1Dao extends Dao<$1> {
         super(db, $1, '$lowercase');
     }
 }
-" > "./src/app/$1/$1.dao.ts"
+" > "$path$1/$1.dao.ts"
 
 echo "
 import { Service } from '@smoke-trees/postgres-backend';
@@ -48,7 +49,7 @@ export class $1Service extends Service<$1> {
         this.dao = dao;
     }
 }
-" > "./src/app/$1/$1.service.ts"
+" > "$path$1/$1.service.ts"
 
 echo "
 import { Application, Controller, ServiceController } from '@smoke-trees/postgres-backend';
@@ -71,6 +72,6 @@ export class $1Controller extends ServiceController<$1> {
         this.loadMiddleware();
     }
 }
-" > "./src/app/$1/$1.controller.ts"
+" > "$path$1/$1.controller.ts"
 
 npx prettier . --write
