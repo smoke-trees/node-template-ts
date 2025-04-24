@@ -1,5 +1,7 @@
 lowercase=$(echo "$1" | tr '[:upper:]' '[:lower:]')
 path=${2:-'./src/app/'}
+snakecase=$(echo "$1" | sed -r 's/([a-z0-9])([A-Z])/\1_\L\2/g' | tr '[:upper:]' '[:lower:]')
+kebabcase=$(echo "$1" | sed -r 's/([a-z0-9])([A-Z])/\1-\L\2/g' | tr '[:upper:]' '[:lower:]')
 mkdir "$path$1"
 touch "$path$1/I$1.ts"
 
@@ -12,7 +14,7 @@ import { BaseEntity, Documentation } from '@smoke-trees/postgres-backend';
 import { I$1 } from './I$1';
 
 @Documentation.addSchema({ type: 'object' })
-@Entity({ name: '$lowercase' })
+@Entity({ name: '$snakecase' })
 export class $1 extends BaseEntity implements I$1 {
     @Documentation.addField({ type: 'string' })
     @PrimaryGeneratedColumn('uuid')
@@ -32,7 +34,7 @@ import { $1 } from './$1.entity';
 
 export class $1Dao extends Dao<$1> {
     constructor(db: Database) {
-        super(db, $1, '$lowercase');
+        super(db, $1, '$snakecase');
     }
 }
 " > "$path$1/$1.dao.ts"
@@ -60,7 +62,7 @@ import { ParsedQs } from 'qs';
 import { $1Service } from './$1.service';
 
 export class $1Controller extends ServiceController<$1> {
-    path: string = '/$lowercase';
+    path: string = '/$kebabcase';
     protected controllers: Controller[] = [];
     protected mw: RequestHandler<ParamsDictionary, any, any, ParsedQs, Record<string, any>>[] = [];
     service: $1Service;
