@@ -32,10 +32,7 @@ jobs:
           postgresql password: 'mysecretpassword'
 
       - name: install pnpm
-        run: npm i -G pnpm
-
-      - name: install packages
-        run: pnpm i
+        run: npm i
 
       - name: Build
         run: npm run build
