@@ -3,11 +3,9 @@ on:
   push:
     branches:
       - master
-      - database/postgres
   pull_request:
     branches:
       - master
-      - database/postgres
 
 jobs:
   test:
