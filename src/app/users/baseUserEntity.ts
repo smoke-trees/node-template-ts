@@ -1,8 +1,4 @@
-import {
-	BaseEntity,
-	Documentation,
-	Validator
-} from '@smoke-trees/postgres-backend'
+import { BaseEntity, Documentation, Validator } from '@smoke-trees/postgres-backend'
 import { Column } from 'typeorm'
 import { IUser } from './IUser'
 

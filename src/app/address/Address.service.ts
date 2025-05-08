@@ -11,9 +11,7 @@ export class AddressService extends Service<Address> {
 		this.dao = dao
 	}
 
-	readMany(
-		options: QueryOption<Address> = {}
-	): Promise<WithCount<Result<Address[]>>> {
+	readMany(options: QueryOption<Address> = {}): Promise<WithCount<Result<Address[]>>> {
 		console.log(options)
 		options = {
 			...options,

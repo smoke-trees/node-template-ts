@@ -48,12 +48,7 @@ Documentation.addInfo({
 //console.log(JSON.stringify(Documentation.getAPIJson()))
 //
 
-app
-	.getApp()
-	.use(
-		'/docs',
-		swaggerUiExpress.serveWithOptions({ cacheControl: true, maxAge: 64800 })
-	)
+app.getApp().use('/docs', swaggerUiExpress.serveWithOptions({ cacheControl: true, maxAge: 64800 }))
 app.getApp().get('/docs', swaggerUiExpress.setup(Documentation.getAPIJson()))
 
 app.loadMiddleware()

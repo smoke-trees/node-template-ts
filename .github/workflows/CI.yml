@@ -33,7 +33,7 @@ jobs:
           postgresql user: 'postgres'
           postgresql password: 'mysecretpassword'
 
-      - name: Fetch dependencies    
+      - name: Fetch dependencies
         run: npm ci
 
       - name: Build

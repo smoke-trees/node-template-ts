@@ -12,10 +12,7 @@ export function ExampleControllerTest(app: Application) {
 			await clearUserTable(app.database!)
 		})
 		it('Create User', async function () {
-			const response = await request
-				.execute(app.getApp())
-				.post('/user')
-				.send({ name: 'Anshuman' })
+			const response = await request.execute(app.getApp()).post('/user').send({ name: 'Anshuman' })
 			assert.equal(response.status, 201)
 			assert.exists(response.body)
 			assert.exists(response.body.result)
@@ -24,10 +21,7 @@ export function ExampleControllerTest(app: Application) {
 			assert.isFalse(response.body.status.error)
 		})
 		it('Create User - No name parameter', async function () {
-			const response = await request
-				.execute(app.getApp())
-				.post('/user')
-				.send({ name1: 'Anshuman' })
+			const response = await request.execute(app.getApp()).post('/user').send({ name1: 'Anshuman' })
 			assert.equal(response.status, 400)
 			assert.exists(response.body)
 			assert.exists(response.body.status)

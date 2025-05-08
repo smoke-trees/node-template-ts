@@ -14,13 +14,7 @@ import { UserService } from './user.service'
 export class UserController extends ServiceController<User> {
 	public path: string = '/user'
 	protected controllers: Controller[]
-	protected mw: RequestHandler<
-		ParamsDictionary,
-		any,
-		any,
-		ParsedQs,
-		Record<string, any>
-	>[]
+	protected mw: RequestHandler<ParamsDictionary, any, any, ParsedQs, Record<string, any>>[]
 	public service: UserService
 	constructor(app: Application, userService: UserService) {
 		super(app, User, userService)

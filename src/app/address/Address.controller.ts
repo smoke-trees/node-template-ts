@@ -1,8 +1,4 @@
-import {
-	Application,
-	Controller,
-	ServiceController
-} from '@smoke-trees/postgres-backend'
+import { Application, Controller, ServiceController } from '@smoke-trees/postgres-backend'
 import { Request, RequestHandler, Response } from 'express'
 import { Address } from './Address.entity'
 import { AddressService } from './Address.service'

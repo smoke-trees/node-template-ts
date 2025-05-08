@@ -1,9 +1,4 @@
-import {
-	Application,
-	Controller,
-	log,
-	Methods
-} from '@smoke-trees/postgres-backend'
+import { Application, Controller, log, Methods } from '@smoke-trees/postgres-backend'
 import { Request, RequestHandler, Response } from 'express'
 
 export default class TestController extends Controller {

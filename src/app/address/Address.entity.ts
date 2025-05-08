@@ -1,11 +1,5 @@
 import { BaseEntity, Documentation } from '@smoke-trees/postgres-backend'
-import {
-	Column,
-	Entity,
-	JoinColumn,
-	ManyToOne,
-	PrimaryGeneratedColumn
-} from 'typeorm'
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { User } from '../users'
 
 export interface IAddress {
