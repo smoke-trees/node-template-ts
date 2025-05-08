@@ -31,8 +31,11 @@ jobs:
           postgresql user: 'postgres'
           postgresql password: 'mysecretpassword'
 
-      - name: Fetch dependencies
-        run: npm ci
+      - name: install pnpm
+        run: npm i -G pnpm
+
+      - name: install packages
+        run: pnpm i
 
       - name: Build
         run: npm run build
