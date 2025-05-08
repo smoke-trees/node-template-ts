@@ -1,29 +1,7 @@
-import { Application, Documentation } from '@smoke-trees/postgres-backend'
+import { Documentation } from '@smoke-trees/postgres-backend'
 import database from './database'
-import { UserController, UserDao, UserService } from './app/users'
-import settings from './settings'
 import swaggerUiExpress from 'swagger-ui-express'
-import cors from 'cors'
-import { json } from 'express'
-import { AddressDao } from './app/address/Address.dao'
-import { AddressService } from './app/address/Address.service'
-import { AddressController } from './app/address/Address.controller'
-
-const app = new Application(settings, database)
-
-const userDao = new UserDao(database)
-const userService = new UserService(userDao)
-const userController = new UserController(app, userService)
-
-const addressDao = new AddressDao(database)
-const addressService = new AddressService(addressDao)
-const addressController = new AddressController(app, addressService)
-
-app.addMiddleWare(cors())
-app.addMiddleWare(json())
-
-app.addController(userController)
-app.addController(addressController)
+import { app } from './setup'
 
 Documentation.addServers([
 	{
