@@ -3,3 +3,6 @@ dist
 coverage
 .nyc_output
 .idea/
+
+.env
+.env*
