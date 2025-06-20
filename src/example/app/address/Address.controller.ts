@@ -1,5 +1,6 @@
 import { Application, Controller, ServiceController } from '@smoke-trees/postgres-backend'
-import { Request, RequestHandler, Response } from 'express'
+import { RequestHandler } from 'express'
+import { inject } from 'inversify'
 import { Address } from './Address.entity'
 import { AddressService } from './Address.service'
 
@@ -10,7 +11,12 @@ export class AddressController extends ServiceController<Address> {
 
 	service: AddressService
 
-	constructor(app: Application, addressService: AddressService) {
+	constructor(
+		@inject(Application)
+		app: Application,
+		@inject(AddressService)
+		addressService: AddressService
+	) {
 		super(app, Address, addressService)
 
 		this.service = addressService

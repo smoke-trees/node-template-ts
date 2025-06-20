@@ -1,9 +1,13 @@
 import { Database, ErrorCode } from '@smoke-trees/postgres-backend'
 import { assert } from 'chai'
 import { UserService } from '../../../app/users'
+import { container } from '../../../setup'
 import { clearUserTable } from '../../utils/clear-database.test'
 
-export function ExampleServiceTest(database: Database, userService: UserService) {
+export function ExampleServiceTest() {
+	const database = container.get<Database>('database')
+	const userService = container.get(UserService)
+
 	describe('User service test', async function () {
 		this.beforeEach(function () {
 			clearUserTable(database)

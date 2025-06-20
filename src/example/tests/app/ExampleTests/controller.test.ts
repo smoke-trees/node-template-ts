@@ -2,11 +2,13 @@ import { Application, ErrorCode } from '@smoke-trees/postgres-backend'
 import * as chai from 'chai'
 import { assert } from 'chai'
 import chaiHttp, { request } from 'chai-http'
+import { container } from '../../../setup'
 import { clearUserTable } from '../../utils/clear-database.test'
 
 chai.use(chaiHttp)
 
-export function ExampleControllerTest(app: Application) {
+export function ExampleControllerTest() {
+	const app = container.get(Application)
 	describe('Example controller test', async function () {
 		this.beforeEach(async function () {
 			await clearUserTable(app.database!)

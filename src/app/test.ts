@@ -1,12 +1,17 @@
 import { Application, Controller, log, Methods } from '@smoke-trees/postgres-backend'
 import { Request, RequestHandler, Response } from 'express'
+import { inject, injectable } from 'inversify'
 
+@injectable()
 export default class TestController extends Controller {
 	public path = '/'
 	protected controllers: Controller[]
 	protected mw: RequestHandler[]
 
-	constructor(app: Application) {
+	constructor(
+		@inject(Application)
+		app: Application
+	) {
 		super(app)
 		this.addRoutes({
 			handler: this.indexHandler.bind(this),

@@ -1,25 +1,16 @@
 import { Application } from '@smoke-trees/postgres-backend'
+import cors from 'cors'
 import { json } from 'express'
-import { AddressController } from './app/address/Address.controller'
-import { AddressDao } from './app/address/Address.dao'
-import { AddressService } from './app/address/Address.service'
-import { UserDao, UserService, UserController } from './app/users'
+import { Container } from 'inversify'
 import database from './database'
 import settings from './settings'
-import cors from 'cors'
 
-export const app = new Application(settings, database)
+export const container: Container = new Container()
 
-export const userDao = new UserDao(database)
-export const userService = new UserService(userDao)
-export const userController = new UserController(app, userService)
+const app = new Application(settings, database)
 
-export const addressDao = new AddressDao(database)
-export const addressService = new AddressService(addressDao)
-export const addressController = new AddressController(app, addressService)
+container.bind('database').toConstantValue(database)
+container.bind(Application).toConstantValue(app)
 
 app.addMiddleWare(cors())
 app.addMiddleWare(json())
-
-app.addController(userController)
-app.addController(addressController)
