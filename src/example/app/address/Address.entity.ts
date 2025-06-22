@@ -15,7 +15,7 @@ export interface IAddress {
 export class Address extends BaseEntity {
 	@PrimaryGeneratedColumn('increment', { name: 'id' })
 	@Documentation.addField({ type: 'number' })
-	id!: number
+	declare id: number
 
 	@Column({ name: 'user_id', type: 'int', nullable: true })
 	@Documentation.addField({ type: 'number' })
