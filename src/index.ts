@@ -10,13 +10,6 @@ Documentation.addServers([
 	}
 ])
 
-Documentation.addTags([
-	{
-		name: 'User',
-		description: 'User related endpoints'
-	}
-])
-
 Documentation.addInfo({
 	title: 'Postgres Backend Template',
 	description: 'This is a template for a postgres backend',
