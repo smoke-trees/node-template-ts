@@ -1,6 +1,6 @@
 {
 	"name": "template-ts",
-	"version": "3.0.0",
+	"version": "3.1.0",
 	"description": "TypeScript version of our Node.js template",
 	"main": "dist/index.js",
 	"scripts": {
@@ -39,7 +39,7 @@
 		}
 	},
 	"dependencies": {
-		"@smoke-trees/postgres-backend": "~2.4.2",
+		"@smoke-trees/postgres-backend": "~2.5.0",
 		"@smoke-trees/smoke-context": "^1.5.4",
 		"chai-http": "^5.1.1",
 		"compression": "^1.7.5",

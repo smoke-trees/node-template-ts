@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@smoke-trees/postgres-backend':
-        specifier: ~2.4.2
-        version: 2.4.2
+        specifier: ~2.5.0
+        version: 2.5.0
       '@smoke-trees/smoke-context':
         specifier: ^1.5.4
         version: 1.5.4
@@ -30,7 +30,7 @@ importers:
         specifier: ^5.1.0
         version: 5.1.0
       inversify:
-        specifier: ^7.5.2
+        specifier: ^7.5.1
         version: 7.5.2(reflect-metadata@0.2.2)
       morgan:
         specifier: ^1.10.0
@@ -253,8 +253,8 @@ packages:
   '@scarf/scarf@1.4.0':
     resolution: {integrity: sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ==}
 
-  '@smoke-trees/postgres-backend@2.4.2':
-    resolution: {integrity: sha512-4gnzOcpaEd5aiD4K+TJiLTuH7e/dV0VfDORGQT5Ztk6ghGygizpXUDnDbD6CTBIW0qg5hvPLTYveGmDuU5IlWg==}
+  '@smoke-trees/postgres-backend@2.5.0':
+    resolution: {integrity: sha512-1STNBX5g69HD6opRMQWKXTShQlXuY0rRQShbZDfg++AqIexGSKPLoOH5n++9Z3Cw/96vO0eAIhDz9Do+ch9Ztg==}
 
   '@smoke-trees/smoke-context@1.5.4':
     resolution: {integrity: sha512-VHV4ou2eVPlInRbK3vY/uquPtrWX7fCzRXq29rzvVuDJe541QyY+gDXPZzOlxoF/IDfMcg4srixHiAjzn851mA==}
@@ -2069,7 +2069,7 @@ snapshots:
 
   '@scarf/scarf@1.4.0': {}
 
-  '@smoke-trees/postgres-backend@2.4.2':
+  '@smoke-trees/postgres-backend@2.5.0':
     dependencies:
       '@smoke-trees/smoke-context': 1.5.4
       '@types/express-serve-static-core': 4.19.6
@@ -2078,7 +2078,7 @@ snapshots:
       dotenv: 16.4.7
       express: 4.21.2
       pg: 8.13.1
-      qs: 6.13.1
+      qs: 6.14.0
       typeorm: 0.3.20(pg@8.13.1)
       winston: 3.17.0
     transitivePeerDependencies:
