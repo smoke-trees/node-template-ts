@@ -3,7 +3,7 @@ import { Column } from 'typeorm'
 import { IUser } from './IUser'
 
 // @Entity({ name: 'user_test_table' })
-@Documentation.addSchema({ type: 'object' })
+@Documentation.addSchema()
 export class BaseUser extends BaseEntity {
 	@Column('varchar', { name: 'name_user_1', length: 255, nullable: true })
 	@Validator({ required: false, updatable: false })

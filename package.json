@@ -1,6 +1,6 @@
 {
 	"name": "template-ts",
-	"version": "3.1.0",
+	"version": "3.2.0",
 	"description": "TypeScript version of our Node.js template",
 	"main": "dist/index.js",
 	"scripts": {
@@ -39,7 +39,7 @@
 		}
 	},
 	"dependencies": {
-		"@smoke-trees/postgres-backend": "~2.5.0",
+		"@smoke-trees/postgres-backend": "~3.0.2",
 		"@smoke-trees/smoke-context": "^1.5.4",
 		"chai-http": "^5.1.1",
 		"compression": "^1.7.5",
@@ -51,6 +51,7 @@
 		"pg": "^8.13.1",
 		"swagger-ui-express": "^5.0.1",
 		"typeorm": "0.3.20",
+		"update": "^0.7.4",
 		"winston": "^3.17.0",
 		"yamljs": "^0.3.0"
 	},

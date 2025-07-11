@@ -1,5 +1,4 @@
-import { Result, Service, WithCount } from '@smoke-trees/postgres-backend'
-import { QueryOption } from '@smoke-trees/postgres-backend/dist/core/Dao'
+import { Service } from '@smoke-trees/postgres-backend'
 import { inject, LazyServiceIdentifier, postConstruct } from 'inversify'
 import { UserService } from '../users'
 import { AddressDao } from './Address.dao'
@@ -22,17 +21,5 @@ export class AddressService extends Service<Address> {
 	@postConstruct()
 	initUserService(@inject(new LazyServiceIdentifier(() => UserService)) userService: UserService) {
 		this.userService = userService
-	}
-
-	readMany(options: QueryOption<Address> = {}): Promise<WithCount<Result<Address[]>>> {
-		console.log(options)
-		options = {
-			...options,
-			dbOptions: {
-				...options.dbOptions,
-				relations: ['user']
-			}
-		}
-		return super.readMany(options)
 	}
 }

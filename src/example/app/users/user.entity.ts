@@ -1,10 +1,10 @@
-import { BaseEntity, Database, Documentation, Validator } from '@smoke-trees/postgres-backend'
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm'
+import { Documentation, Validator } from '@smoke-trees/postgres-backend'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { BaseUser } from './baseUserEntity'
 import { IUser } from './IUser'
 
 @Entity({ name: 'user_test_table' })
-@Documentation.addSchema({ type: 'object' })
+@Documentation.addSchema()
 export class User extends BaseUser implements IUser {
 	@PrimaryGeneratedColumn('increment', { name: 'id' })
 	@Documentation.addField({ type: 'number' })

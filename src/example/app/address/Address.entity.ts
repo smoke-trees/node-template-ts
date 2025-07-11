@@ -11,7 +11,7 @@ export interface IAddress {
 }
 
 @Entity({ name: 'address_demo' })
-@Documentation.addSchema({ type: 'object' })
+@Documentation.addSchema()
 export class Address extends BaseEntity {
 	@PrimaryGeneratedColumn('increment', { name: 'id' })
 	@Documentation.addField({ type: 'number' })
