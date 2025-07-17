@@ -13,7 +13,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity, Documentation } from '@smoke-trees/postgres-backend';
 import { I$1 } from './I$1';
 
-@Documentation.addSchema({ type: 'object' })
+@Documentation.addSchema()
 @Entity({ name: '$snakecase' })
 export class $1 extends BaseEntity implements I$1 {
     @Documentation.addField({ type: 'string' })
