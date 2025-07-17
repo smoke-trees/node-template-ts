@@ -30,10 +30,15 @@ export class $1 extends BaseEntity implements I$1 {
 
 echo "
 import { Dao, Database } from '@smoke-trees/postgres-backend';
+import { inject } from 'inversify'
+import { inject } from 'inversify'
 import { $1 } from './$1.entity';
 
 export class $1Dao extends Dao<$1> {
-    constructor(db: Database) {
+    constructor(
+        @injest('database')
+        db: Database
+    ) {
         super(db, $1, '$snakecase');
     }
 }
@@ -46,7 +51,10 @@ import { $1 } from './$1.entity';
 
 export class $1Service extends Service<$1> {
     dao: $1Dao;
-    constructor(dao: $1Dao) {
+    constructor(
+        @inject($1Dao)
+        dao: $1Dao
+    ) {
         super(dao);
         this.dao = dao;
     }
@@ -60,13 +68,19 @@ import { RequestHandler } from 'express';
 import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs'; 
 import { $1Service } from './$1.service';
+import { inject } from 'inversify'
 
 export class $1Controller extends ServiceController<$1> {
     path: string = '/$kebabcase';
     protected controllers: Controller[] = [];
     protected mw: RequestHandler<ParamsDictionary, any, any, ParsedQs, Record<string, any>>[] = [];
     service: $1Service;
-    constructor(app: Application, service: $1Service) {
+    constructor(
+        @inject(Application)
+        app: Application, 
+        @inject($1Service)
+        service: $1Service
+    ) {
         super(app, $1, service)
         this.service = service;
         this.addRoutes();

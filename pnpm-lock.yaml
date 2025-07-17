@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@smoke-trees/postgres-backend':
-        specifier: ~3.0.0
-        version: 3.0.0
+        specifier: ~3.0.2
+        version: 3.0.2
       '@smoke-trees/smoke-context':
         specifier: ^1.5.4
         version: 1.5.4
@@ -256,8 +256,8 @@ packages:
   '@scarf/scarf@1.4.0':
     resolution: {integrity: sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ==}
 
-  '@smoke-trees/postgres-backend@3.0.0':
-    resolution: {integrity: sha512-awVkbjzJ4aBPHlaGhICJT9T9ikqDdslSucLOO2w65mRQpotxQqmgsuVf/7vHRBIgK0Kw8CIdh+PQxrNjul9Png==}
+  '@smoke-trees/postgres-backend@3.0.2':
+    resolution: {integrity: sha512-lXRbRM+8YTbIMyI4sH58ZrYX/+3d3tnSVUyp3YIvUWcHfL0PDoIEBJU/ltW9eqPAMB8lXAMZcFq2bPa8JXHtbA==}
 
   '@smoke-trees/smoke-context@1.5.4':
     resolution: {integrity: sha512-VHV4ou2eVPlInRbK3vY/uquPtrWX7fCzRXq29rzvVuDJe541QyY+gDXPZzOlxoF/IDfMcg4srixHiAjzn851mA==}
@@ -3251,6 +3251,7 @@ packages:
   superagent@9.0.2:
     resolution: {integrity: sha512-xuW7dzkUpcJq7QnhOsnNUgtYp3xRwpt2F7abdRYIpCsAt0hhUqia0EdxyXZQQpNmGtsCzYHryaKSV3q3GJnq7w==}
     engines: {node: '>=14.18.0'}
+    deprecated: Please upgrade to superagent v10.2.2+, see release notes at https://github.com/forwardemail/superagent/releases/tag/v10.2.2 - maintenance is supported by Forward Email @ https://forwardemail.net
 
   supports-color@2.0.0:
     resolution: {integrity: sha512-KKNVtd6pCYgPIKU4cp2733HWYCpplQhddZLBUryaAHou723x+FRzQ5Df824Fj+IyyuiQTRoub4SnIFfIcrp70g==}
@@ -3797,7 +3798,7 @@ snapshots:
 
   '@scarf/scarf@1.4.0': {}
 
-  '@smoke-trees/postgres-backend@3.0.0':
+  '@smoke-trees/postgres-backend@3.0.2':
     dependencies:
       '@smoke-trees/smoke-context': 1.5.4
       '@types/express-serve-static-core': 4.19.6
