@@ -90,4 +90,15 @@ export class $1Controller extends ServiceController<$1> {
 }
 " > "$path$1/$1.controller.ts"
 
+sed -i "/^import settings from '.\/settings'/a\import { $1 } from '.\/app\/$1\/$1.entity'" ./src/database.ts
+sed -i "/^\/\/ Add Entities/a\database.addEntity($1)" ./src/database.ts 
+
+sed -i "/^import settings from '.\/settings'/a\import { $1Dao } from '.\/app\/$1\/$1.dao'" ./src/setup.ts
+sed -i "/^import settings from '.\/settings'/a\import { $1Service } from '.\/app\/$1\/$1.service'" ./src/setup.ts
+sed -i "/^import settings from '.\/settings'/a\import { $1Controller } from '.\/app\/$1\/$1.controller'" ./src/setup.ts
+
+sed -i "/^container.bind(Application).toConstantValue(app)/a\container.bind($1Dao).toSelf()" ./src/setup.ts
+sed -i "/^container.bind(Application).toConstantValue(app)/a\container.bind($1Service).toSelf()" ./src/setup.ts
+sed -i "/^container.bind(Application).toConstantValue(app)/a\container.bind($1Controller).toSelf()" ./src/setup.ts
+
 npx prettier . --write
