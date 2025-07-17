@@ -97,8 +97,8 @@ sed -i "/^import settings from '.\/settings'/a\import { $1Dao } from '.\/app\/$1
 sed -i "/^import settings from '.\/settings'/a\import { $1Service } from '.\/app\/$1\/$1.service'" ./src/setup.ts
 sed -i "/^import settings from '.\/settings'/a\import { $1Controller } from '.\/app\/$1\/$1.controller'" ./src/setup.ts
 
-sed -i "/^container.bind(Application).toConstantValue(app)/a\container.bind($1Dao).toSelf()" ./src/setup.ts
-sed -i "/^container.bind(Application).toConstantValue(app)/a\container.bind($1Service).toSelf()" ./src/setup.ts
 sed -i "/^container.bind(Application).toConstantValue(app)/a\container.bind($1Controller).toSelf()" ./src/setup.ts
+sed -i "/^container.bind(Application).toConstantValue(app)/a\container.bind($1Service).toSelf()" ./src/setup.ts
+sed -i "/^container.bind(Application).toConstantValue(app)/a\ \ncontainer.bind($1Dao).toSelf()" ./src/setup.ts
 
 npx prettier . --write
