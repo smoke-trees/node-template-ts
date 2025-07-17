@@ -31,12 +31,11 @@ export class $1 extends BaseEntity implements I$1 {
 echo "
 import { Dao, Database } from '@smoke-trees/postgres-backend';
 import { inject } from 'inversify'
-import { inject } from 'inversify'
 import { $1 } from './$1.entity';
 
 export class $1Dao extends Dao<$1> {
     constructor(
-        @injest('database')
+        @inject('database')
         db: Database
     ) {
         super(db, $1, '$snakecase');
@@ -48,6 +47,7 @@ echo "
 import { Service } from '@smoke-trees/postgres-backend';
 import { $1Dao } from './$1.dao';
 import { $1 } from './$1.entity';
+import { inject } from 'inversify'
 
 export class $1Service extends Service<$1> {
     dao: $1Dao;
