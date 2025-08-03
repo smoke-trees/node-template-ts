@@ -1,5 +1,5 @@
 import { Database } from '@smoke-trees/postgres-backend'
-import './config'
+import './config-env'
 import settings from './settings'
 
 const database = new Database(settings)

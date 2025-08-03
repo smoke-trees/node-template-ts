@@ -1,4 +1,5 @@
 import { Settings } from '@smoke-trees/postgres-backend'
+import './config-env'
 
 export class ApplicationSettings extends Settings {
 	databaseType: 'postgres' | 'mysql'
