@@ -76,7 +76,7 @@
 		"mocha": "^11.7.1",
 		"nodemon": "^3.1.10",
 		"prettier": "^3.6.2",
-		"typescript": "^5.9.0"
+		"typescript": "^5.9.2"
 	},
 	"pnpm": {
 		"overrides": {
