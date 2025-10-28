@@ -9,6 +9,8 @@ export const container: Container = new Container()
 
 const app = new Application(settings, database)
 
+app.getApp().set("query parser", 'extended')
+
 container.bind('database').toConstantValue(database)
 container.bind(Application).toConstantValue(app)
 
