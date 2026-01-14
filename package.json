@@ -32,12 +32,6 @@
 		"url": "https://github.com/smoke-trees/node-template-ts/issues"
 	},
 	"homepage": "https://github.com/smoke-trees/node-template-ts#readme",
-	"eslintConfig": {
-		"rules": {
-			"no-unused-vars": "off",
-			"@typescript-eslint/no-unused-vars": "error"
-		}
-	},
 	"dependencies": {
 		"@smoke-trees/postgres-backend": "~4.0.0",
 		"@smoke-trees/smoke-context": "^1.6.0",
