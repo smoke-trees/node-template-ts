@@ -61,7 +61,7 @@ This backend is built using the smoke-trees ecosystem, specifically leveraging `
 - Generates:
   - `IEntityName.ts`: Interface definition
   - `EntityName.entity.ts`: TypeORM entity class
-  - `EntityName.dao.ts`: Data Access Object
+  - `EntityName.dao.ts`: Data Access Object to interact with the database.
   - `EntityName.service.ts`: Business logic service
   - `EntityName.controller.ts`: REST API controller
 - Automatically updates `database.ts` and `setup.ts` to register the new entity
@@ -71,11 +71,14 @@ This backend is built using the smoke-trees ecosystem, specifically leveraging `
 - Use the `log` object from the `smoke-context` package for all logging operations
 - Avoid using `console.log` directly
 - The logger is configured via postgres-backend and supports structured logging
+- All the logs should be in the format `log.[type]([log message], [class name][function name], [object for and parameters needed])`
+- Error logs will be in the format `log.error([log message], [class name][function name], error, [object for and parameters needed])`
+- Use `log.error` for errors only (inside the catch block) and `log.warn` for unhappy paths inside a function (early returns)
 - Examples:
-  - `log.info('Informational message')`
-  - `log.error('Error occurred')`
-  - `log.debug('Debug information')`
-  - `log.warn('Warning message')`
+  - `log.info('Informational message', 'ClassName.functionName', {key: 'value'})`
+  - `log.error('Error occurred', 'ClassName.functionName', error, {key: 'value'})`
+  - `log.debug('Debug information', 'ClassName.functionName', {key: 'value'})`
+  - `log.warn('Warning message', 'ClassName.functionName', {key: 'value'})`
 
 ## Context and Authentication
 
@@ -86,9 +89,12 @@ This backend is built using the smoke-trees ecosystem, specifically leveraging `
 ## Database Operations
 
 - Use TypeORM entities extending `BaseEntity` from postgres-backend
-- DAOs extend `Dao<T>` for CRUD operations
+- DAOs extend `Dao<T>` for CRUD operations.
 - Services extend `Service<T>` for business logic
 - Controllers extend `ServiceController<T>` for REST endpoints
+- The `Dao` class is abstract and had pre-written methods for CRUD operations.
+- The `ServiceController` class is abstract and had pre-written routes for CRUD operations.
+- Only use the database object if what you are trying to do is not supported by the existing dao
 
 ## Testing
 
@@ -117,3 +123,27 @@ This backend is built using the smoke-trees ecosystem, specifically leveraging `
 4. Write tests for new functionality
 5. Run migrations for database schema changes
 6. Use `npm run dev` for development with hot reload
+
+## Function Rules
+- All Functions should return `Result` or `ResultWithCount` object from `@smoke-trees/postgres-backend` package.
+- The first parameter is boolean indicatinf if there's an error.
+- The second parameter is error code of `ErrorCode` enum from the same package.
+- The Third parameter is the message indicating what the error is.
+- The fourth parameter is the response of the function
+- All functions should be writted inside try catch block.
+- All catch block will log the error using `log.error` and return the `Result` object.
+- Avoid explicit Return types in functions, typescript will infer the return type
+
+## Dao Functions
+- `read` function to read single entry from the database. Defaults to `id` field but can be passed a where clause using `{where: {field: value}}` object.
+- `readMany` function to read multiple entries from the database
+- `create` function to create a new entry in the database
+- `update` function to update an existing entry in the database
+- `delete` function to delete an existing entry from the database
+
+## Result Object
+- Use `result.status.error` to check if there's an error
+- Use `result.status.code` to check the error code
+- Use `result.message` to check the error message
+- Use `result.result` to get the data returned by the function
+- Use `result.count` to get the count of the data returned by the function
