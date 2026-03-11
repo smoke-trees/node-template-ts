@@ -38,6 +38,8 @@ This backend is built using the smoke-trees ecosystem, specifically leveraging `
 - Use `camelCase` for function names
 - Use `camelCase` for method names
 - Use `camelCase` for property names
+- Avoid using `any` at all costs
+- Prioritize typescript inference over explicit type declarations but declare types for variables that are not inferred correctly
 
 ## Project Structure
 
@@ -69,7 +71,8 @@ This backend is built using the smoke-trees ecosystem, specifically leveraging `
 ## Logging
 
 - Use the `log` object from the `smoke-context` package for all logging operations
-- Avoid using `console.log` directly
+- Scan for any `console.*` call. Every occurrence is an error — no exceptions.
+- Never use `console.log` directly
 - The logger is configured via postgres-backend and supports structured logging
 - All the logs should be in the format `log.[type]([log message], [class name][function name], [object for and parameters needed])`
 - Error logs will be in the format `log.error([log message], [class name][function name], error, [object for and parameters needed])`
