@@ -147,3 +147,7 @@ This backend is built using the smoke-trees ecosystem, specifically leveraging `
 - Use `result.message` to check the error message
 - Use `result.result` to get the data returned by the function
 - Use `result.count` to get the count of the data returned by the function
+
+
+### General Docs
+Docs: [https://github.com/smoke-trees/node-template-ts/wiki](https://github.com/smoke-trees/node-template-ts/wiki)
