@@ -2,6 +2,7 @@ import { Application, Documentation } from '@smoke-trees/postgres-backend'
 import swaggerUiExpress from 'swagger-ui-express'
 import database from './database'
 import { container } from './setup'
+import { valkeyService } from './utils/valkey.service'
 
 Documentation.addServers([
 	{
@@ -25,5 +26,6 @@ app.loadMiddleware()
 app.loadControllers()
 
 database.connect()
+valkeyService.connect()
 
 app.run()
