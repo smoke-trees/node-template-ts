@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@smoke-trees/postgres-backend':
         specifier: ~4.1.2
-        version: 4.1.2(@smoke-trees/smoke-context@1.6.0(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0)))(@types/express-serve-static-core@5.1.3)(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0))(pg@8.23.1)(supports-color@5.5.0)(typeorm@0.3.25(pg@8.23.1)(reflect-metadata@0.2.2)(supports-color@5.5.0))
+        version: 4.1.2(@smoke-trees/smoke-context@1.6.0(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0)))(@types/express-serve-static-core@5.1.3)(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0))(pg@8.23.1)(supports-color@5.5.0)(typeorm@0.3.31(pg@8.23.1)(supports-color@5.5.0))
       '@smoke-trees/smoke-context':
         specifier: ^1.6.0
         version: 1.6.0(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0))
@@ -51,8 +51,8 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1(express@5.3.0(supports-color@5.5.0))
       typeorm:
-        specifier: 0.3.25
-        version: 0.3.25(pg@8.23.1)(reflect-metadata@0.2.2)(supports-color@5.5.0)
+        specifier: 0.3.31
+        version: 0.3.31(pg@8.23.1)(supports-color@5.5.0)
       winston:
         specifier: ^3.17.0
         version: 3.19.0
@@ -525,8 +525,8 @@ packages:
     resolution: {integrity: sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==}
     engines: {node: '>=12'}
 
-  ansis@3.17.0:
-    resolution: {integrity: sha512-0qWUglt9JEqLFr3w1I1pbrChn1grhaiAR2ocX1PP/flRmxgtwTzPFFFnfIlD6aMOLQZgSuCRlidD70lvx8yhzg==}
+  ansis@4.4.0:
+    resolution: {integrity: sha512-9k3v7xcHwgdO/DruxGIg4HtjvlAZlcnsX/mzqUb1t3NkYnl9kK2UJ+Gq0io+vQf7iT//BD/HB/NBkUR1LWxoeA==}
     engines: {node: '>=14'}
 
   anymatch@3.1.3:
@@ -1741,27 +1741,25 @@ packages:
     resolution: {integrity: sha512-nAYYwfY3qnzX30IkA6AQZjVbtK6duGontcQm1WSG1MD94YLqK0515GNApXkoxKOWMusVssAHWLh9SeaoefYFGw==}
     engines: {node: '>= 0.4'}
 
-  typeorm@0.3.25:
-    resolution: {integrity: sha512-fTKDFzWXKwAaBdEMU4k661seZewbNYET4r1J/z3Jwf+eAvlzMVpTLKAVcAzg75WwQk7GDmtsmkZ5MfkmXCiFWg==}
+  typeorm@0.3.31:
+    resolution: {integrity: sha512-6u9EFtdLBgHjnPm78NStVeM+I/1MolTzKykDDcydzKUkh6E++YS6XViU/fePJbvDvEGU4Xq34KOM/CLeer9I2A==}
     engines: {node: '>=16.13.0'}
     hasBin: true
     peerDependencies:
-      '@google-cloud/spanner': ^5.18.0 || ^6.0.0 || ^7.0.0
-      '@sap/hana-client': ^2.12.25
-      better-sqlite3: ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0
-      hdb-pool: ^0.1.6
+      '@google-cloud/spanner': ^5.18.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
+      '@sap/hana-client': ^2.14.22
+      better-sqlite3: ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0
       ioredis: ^5.0.4
       mongodb: ^5.8.0 || ^6.0.0
-      mssql: ^9.1.1 || ^10.0.1 || ^11.0.1
+      mssql: ^9.1.1 || ^10.0.0 || ^11.0.0 || ^12.0.0
       mysql2: ^2.2.5 || ^3.0.1
-      oracledb: ^6.3.0
+      oracledb: ^6.3.0 || ^7.0.0
       pg: ^8.5.1
       pg-native: ^3.0.0
       pg-query-stream: ^4.0.0
-      redis: ^3.1.1 || ^4.0.0
-      reflect-metadata: ^0.1.14 || ^0.2.0
+      redis: ^3.1.1 || ^4.0.0 || ^5.0.14
       sql.js: ^1.4.0
-      sqlite3: ^5.0.3
+      sqlite3: ^5.0.3 || ^6.0.0
       ts-node: ^10.7.0
       typeorm-aurora-data-api-driver: ^2.0.0 || ^3.0.0
     peerDependenciesMeta:
@@ -1770,8 +1768,6 @@ packages:
       '@sap/hana-client':
         optional: true
       better-sqlite3:
-        optional: true
-      hdb-pool:
         optional: true
       ioredis:
         optional: true
@@ -2061,7 +2057,7 @@ snapshots:
 
   '@scarf/scarf@1.4.0': {}
 
-  '@smoke-trees/postgres-backend@4.1.2(@smoke-trees/smoke-context@1.6.0(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0)))(@types/express-serve-static-core@5.1.3)(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0))(pg@8.23.1)(supports-color@5.5.0)(typeorm@0.3.25(pg@8.23.1)(reflect-metadata@0.2.2)(supports-color@5.5.0))':
+  '@smoke-trees/postgres-backend@4.1.2(@smoke-trees/smoke-context@1.6.0(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0)))(@types/express-serve-static-core@5.1.3)(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0))(pg@8.23.1)(supports-color@5.5.0)(typeorm@0.3.31(pg@8.23.1)(supports-color@5.5.0))':
     dependencies:
       '@smoke-trees/smoke-context': 1.6.0(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0))
       '@types/compression': 1.8.1
@@ -2078,7 +2074,7 @@ snapshots:
       lodash.set: 4.3.2
       pg: 8.23.1
       qs: 6.17.1
-      typeorm: 0.3.25(pg@8.23.1)(reflect-metadata@0.2.2)(supports-color@5.5.0)
+      typeorm: 0.3.31(pg@8.23.1)(supports-color@5.5.0)
       winston: 3.19.0
     transitivePeerDependencies:
       - supports-color
@@ -2365,7 +2361,7 @@ snapshots:
 
   ansi-styles@6.2.3: {}
 
-  ansis@3.17.0: {}
+  ansis@4.4.0: {}
 
   anymatch@3.1.3:
     dependencies:
@@ -3609,10 +3605,10 @@ snapshots:
       es-errors: 1.3.0
       is-typed-array: 1.1.15
 
-  typeorm@0.3.25(pg@8.23.1)(reflect-metadata@0.2.2)(supports-color@5.5.0):
+  typeorm@0.3.31(pg@8.23.1)(supports-color@5.5.0):
     dependencies:
       '@sqltools/formatter': 1.2.5
-      ansis: 3.17.0
+      ansis: 4.4.0
       app-root-path: 3.1.0
       buffer: 6.0.3
       dayjs: 1.11.23
