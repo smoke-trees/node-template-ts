@@ -1,4 +1,4 @@
-import { Application } from '@smoke-trees/postgres-backend'
+import { Application, StLoggerMiddleware } from '@smoke-trees/postgres-backend'
 import cors from 'cors'
 import { json } from 'express'
 import { Container } from 'inversify'
@@ -21,6 +21,7 @@ container.bind(AclRuleController).toSelf()
 
 app.addMiddleWare(cors())
 app.addMiddleWare(json())
-app.addMiddleWare(createAclMiddleware(container.get(AclRuleService), settings.aclSkippedRoutes))
 
+app.addMiddleWare(createAclMiddleware(container.get(AclRuleService), settings.aclSkippedRoutes))
+app.addMiddleWare(StLoggerMiddleware({ setting: settings, stLoggerDao: app.stLoggerDao }))
 app.addController(container.get(AclRuleController))
