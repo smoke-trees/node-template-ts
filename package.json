@@ -37,6 +37,7 @@
 		"@smoke-trees/smoke-context": "^1.6.0",
 		"@types/express": "^5.0.3",
 		"@types/express-serve-static-core": "^5.0.7",
+		"@valkey/valkey-glide": "^2.4.2",
 		"chai-http": "^5.1.2",
 		"compression": "^1.8.1",
 		"cors": "^2.8.5",

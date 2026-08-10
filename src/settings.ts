@@ -8,6 +8,11 @@ export class ApplicationSettings extends Settings {
 	dbHost: string
 	dbPort: string | undefined
 	database: string
+	valkeyHost: string
+	valkeyPort: number
+	valkeyDatabaseId: number
+	valkeyPassword: string
+	valkeyUsername: string
 
 	constructor() {
 		super()
@@ -17,6 +22,11 @@ export class ApplicationSettings extends Settings {
 		this.dbHost = this.getValue('PGHOST', 'localhost')
 		this.dbPort = this.getValue('PGPORT', '5432')
 		this.database = this.getValue('PGDATABASE', 'postgres')
+		this.valkeyHost = this.getValue('VALKEY_HOST', 'localhost')
+		this.valkeyPort = parseInt(this.getValue('VALKEY_PORT', '6379'), 10)
+		this.valkeyDatabaseId = parseInt(this.getValue('VALKEY_DATABASE_ID', '1'), 10)
+		this.valkeyPassword = this.getValue('VALKEY_PASSWORD', '')
+		this.valkeyUsername = this.getValue('VALKEY_USERNAME', '')
 	}
 }
 
