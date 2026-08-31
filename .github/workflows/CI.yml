@@ -14,7 +14,18 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node-version: [22.x]
+        node-version: [24.x]
+
+    services:
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v2
@@ -27,12 +38,15 @@ jobs:
         uses: harmon758/postgresql-action@v1
         with:
           postgresql version: '12'
-          postgresql db: 'postgres'
+          postgresql db: 'digi_dukaan'
           postgresql user: 'postgres'
           postgresql password: 'mysecretpassword'
 
       - name: install pnpm
-        run: npm i
+        run: npm i -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         run: npm run build
