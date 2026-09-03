@@ -30,6 +30,13 @@ This backend is built using the smoke-trees ecosystem, specifically leveraging `
 - The `id` field will always be a `PrimaryGeneratedColumn` of UUID type unless you specify otherwise.
 - The `id` field in the interface will always be optional
 
+### Database migrations
+
+- Do not create, edit, rename, register, or delete migrations.
+- Migrations are generated and managed exclusively by the user.
+- Entity changes may be made when requested, but clearly state the migration
+  requirements for Dhyan to handle.
+
 ### TypeScript Conventions
 
 - Use `camelCase` for variable names
