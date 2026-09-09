@@ -13,6 +13,7 @@ export class ApplicationSettings extends Settings {
 	valkeyDatabaseId: number
 	valkeyPassword: string
 	valkeyUsername: string
+	aclSkippedRoutes: string[]
 
 	constructor() {
 		super()
@@ -27,6 +28,10 @@ export class ApplicationSettings extends Settings {
 		this.valkeyDatabaseId = parseInt(this.getValue('VALKEY_DATABASE_ID', '1'), 10)
 		this.valkeyPassword = this.getValue('VALKEY_PASSWORD', '')
 		this.valkeyUsername = this.getValue('VALKEY_USERNAME', '')
+		this.aclSkippedRoutes = this.getValue('ACL_SKIPPED_ROUTES', '/docs*,/health')
+			.split(',')
+			.map((s) => s.trim())
+			.filter(Boolean)
 	}
 }
 
