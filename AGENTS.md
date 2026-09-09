@@ -35,7 +35,7 @@ This backend is built using the smoke-trees ecosystem, specifically leveraging `
 - Do not create, edit, rename, register, or delete migrations.
 - Migrations are generated and managed exclusively by the user.
 - Entity changes may be made when requested, but clearly state the migration
-  requirements for Dhyan to handle.
+  requirements for the user to handle.
 
 ### TypeScript Conventions
 
