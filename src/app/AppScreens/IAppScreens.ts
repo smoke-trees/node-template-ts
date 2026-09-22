@@ -7,4 +7,5 @@ export interface IAppScreens {
 	scheduleStartDate?: string
 	scheduleEndDate?: string
 	lastDeployed: string
+	supportedAppVersion?: string
 }

@@ -81,6 +81,14 @@ export class AppScreensController extends ServiceController<AppScreens> {
 				localMiddleware: [
 					// TODO: App routes auth
 				]
+			},
+			{
+				handler: this.getLatestScreen.bind(this),
+				method: Methods.GET,
+				path: '/get-latest/:screenName',
+				localMiddleware: [
+					// TODO: App routes auth
+				]
 			}
 		)
 		this.loadDocumentation()
@@ -98,6 +106,9 @@ export class AppScreensController extends ServiceController<AppScreens> {
 					type: 'string'
 				},
 				screenJson: {
+					type: 'string'
+				},
+				appVersion: {
 					type: 'string'
 				}
 			}
@@ -118,8 +129,20 @@ export class AppScreensController extends ServiceController<AppScreens> {
 		}
 	})
 	async deployScreen(req: Request, res: Response) {
-		const { screenName, screenJson } = req.body
-		const result = await this.service.deployScreen(screenName, screenJson)
+		const { screenName, screenJson, appVersion } = req.body
+		if (!screenName || !screenJson || !appVersion) {
+			res
+				.status(400)
+				.json(
+					new Result(
+						true,
+						ErrorCode.BadRequest,
+						'screenName, screenJson and appVersion are required'
+					)
+				)
+			return
+		}
+		const result = await this.service.deployScreen(screenName, screenJson, appVersion)
 		res.status(200).json(result)
 	}
 
@@ -144,6 +167,9 @@ export class AppScreensController extends ServiceController<AppScreens> {
 				},
 				makeLatest: {
 					type: 'boolean'
+				},
+				appVersion: {
+					type: 'string'
 				}
 			}
 		},
@@ -163,13 +189,29 @@ export class AppScreensController extends ServiceController<AppScreens> {
 		}
 	})
 	async scheduleDeployScreen(req: Request, res: Response) {
-		const { screenName, screenJson, scheduleStartDate, scheduleEndDate, makeLatest } = req.body
+		const { screenName, screenJson, scheduleStartDate, scheduleEndDate, makeLatest, appVersion } =
+			req.body
+
+		if (!screenName || !screenJson || !appVersion || !scheduleStartDate || !scheduleEndDate) {
+			res
+				.status(400)
+				.json(
+					new Result(
+						true,
+						ErrorCode.BadRequest,
+						'screenName, screenJson, scheduleStartDate, scheduleEndDate and appVersion are required'
+					)
+				)
+			return
+		}
+
 		const result = await this.service.scheduleDeployScreen(
 			screenName,
 			screenJson,
 			scheduleStartDate,
 			scheduleEndDate,
-			makeLatest
+			makeLatest,
+			appVersion
 		)
 		res.status(200).json(result)
 	}
@@ -186,6 +228,9 @@ export class AppScreensController extends ServiceController<AppScreens> {
 				},
 				version: {
 					type: 'number'
+				},
+				appVersion: {
+					type: 'string'
 				}
 			}
 		},
@@ -205,8 +250,16 @@ export class AppScreensController extends ServiceController<AppScreens> {
 		}
 	})
 	async revertScreen(req: Request, res: Response) {
-		const { screenName, version } = req.body
-		const result = await this.service.revertLatest(screenName, version)
+		const { screenName, appVersion, version } = req.body
+
+		if (!screenName || !appVersion) {
+			res
+				.status(400)
+				.json(new Result(true, ErrorCode.BadRequest, 'screenName and appVersion are required'))
+			return
+		}
+
+		const result = await this.service.revertLatest(screenName, appVersion, version)
 		res.status(200).json(result)
 	}
 
@@ -318,5 +371,47 @@ export class AppScreensController extends ServiceController<AppScreens> {
 		const { date } = req.body ?? {}
 		const result = await this.service.expireScheduled(date)
 		res.status(200).json(result)
+	}
+
+	@Documentation.addRoute({
+		method: Methods.GET,
+		path: '/app-screens/get-latest/:screenName',
+		description: 'Get the latest version of a screen',
+		requestBody: {
+			type: 'object',
+			properties: {
+				appVersion: {
+					type: 'string'
+				}
+			}
+		},
+		responses: {
+			400: {
+				description: 'Invalid Request',
+				value: {
+					$ref: Documentation.getRef(Result)
+				}
+			},
+			200: {
+				description: 'Screen Reverted',
+				value: {
+					$ref: Documentation.getRef(Result)
+				}
+			}
+		}
+	})
+	async getLatestScreen(req: Request, res: Response) {
+		const { appVersion } = req.query
+		if (!req.query.screenName || !appVersion) {
+			res
+				.status(400)
+				.json(new Result(true, ErrorCode.BadRequest, 'screenName and appVersion are required'))
+			return
+		}
+		const result = await this.service.getLatestScreen(
+			req.query.screenName.toString(),
+			appVersion.toString()
+		)
+		res.status(result.getStatus()).json(result)
 	}
 }

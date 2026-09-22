@@ -37,6 +37,10 @@ export class AppScreens extends BaseEntity implements IAppScreens {
 	@Column({ name: 'last_deployed', type: 'timestamp without time zone', nullable: true })
 	lastDeployed!: string
 
+	@Documentation.addField({ type: 'string' })
+	@Column({ name: 'supported_app_version', type: 'varchar', nullable: true }) // TODO: remove nullable
+	supportedAppVersion?: string
+
 	constructor(data?: IAppScreens) {
 		super()
 		if (data) {
@@ -48,6 +52,7 @@ export class AppScreens extends BaseEntity implements IAppScreens {
 			this.scheduleStartDate = data.scheduleStartDate
 			this.scheduleEndDate = data.scheduleEndDate
 			this.lastDeployed = data.lastDeployed
+			this.supportedAppVersion = data.supportedAppVersion
 		}
 	}
 }

@@ -81,6 +81,14 @@ export class AppThemesController extends ServiceController<AppThemes> {
 				localMiddleware: [
 					// TODO: App routes auth
 				]
+			},
+			{
+				handler: this.getLatestTheme.bind(this),
+				method: Methods.GET,
+				path: '/get-latest/:themeName',
+				localMiddleware: [
+					// TODO: App routes auth
+				]
 			}
 		)
 		this.loadDocumentation()
@@ -98,6 +106,9 @@ export class AppThemesController extends ServiceController<AppThemes> {
 					type: 'string'
 				},
 				themeJson: {
+					type: 'string'
+				},
+				appVersion: {
 					type: 'string'
 				}
 			}
@@ -118,8 +129,16 @@ export class AppThemesController extends ServiceController<AppThemes> {
 		}
 	})
 	async deployTheme(req: Request, res: Response) {
-		const { themeName, themeJson } = req.body
-		const result = await this.service.deployTheme(themeName, themeJson)
+		const { themeName, themeJson, appVersion } = req.body
+		if (!themeName || !themeJson || !appVersion) {
+			res
+				.status(400)
+				.json(
+					new Result(true, ErrorCode.BadRequest, 'themeName, themeJson and appVersion are required')
+				)
+			return
+		}
+		const result = await this.service.deployTheme(themeName, themeJson, appVersion)
 		res.status(200).json(result)
 	}
 
@@ -144,6 +163,9 @@ export class AppThemesController extends ServiceController<AppThemes> {
 				},
 				makeLatest: {
 					type: 'boolean'
+				},
+				appVersion: {
+					type: 'string'
 				}
 			}
 		},
@@ -163,13 +185,27 @@ export class AppThemesController extends ServiceController<AppThemes> {
 		}
 	})
 	async scheduleDeployTheme(req: Request, res: Response) {
-		const { themeName, themeJson, scheduleStartDate, scheduleEndDate, makeLatest } = req.body
+		const { themeName, themeJson, scheduleStartDate, scheduleEndDate, makeLatest, appVersion } =
+			req.body
+		if (!themeName || !themeJson || !scheduleStartDate || !scheduleEndDate || !appVersion) {
+			res
+				.status(400)
+				.json(
+					new Result(
+						true,
+						ErrorCode.BadRequest,
+						'themeName, themeJson, scheduleStartDate, scheduleEndDate and appVersion are required'
+					)
+				)
+			return
+		}
 		const result = await this.service.scheduleDeployTheme(
 			themeName,
 			themeJson,
 			scheduleStartDate,
 			scheduleEndDate,
-			makeLatest
+			makeLatest,
+			appVersion
 		)
 		res.status(200).json(result)
 	}
@@ -186,6 +222,9 @@ export class AppThemesController extends ServiceController<AppThemes> {
 				},
 				version: {
 					type: 'number'
+				},
+				appVersion: {
+					type: 'string'
 				}
 			}
 		},
@@ -205,8 +244,14 @@ export class AppThemesController extends ServiceController<AppThemes> {
 		}
 	})
 	async revertTheme(req: Request, res: Response) {
-		const { themeName, version } = req.body
-		const result = await this.service.revertLatest(themeName, version)
+		const { themeName, version, appVersion } = req.body
+		if (!themeName || !appVersion) {
+			res
+				.status(400)
+				.json(new Result(true, ErrorCode.BadRequest, 'themeName and appVersion are required'))
+			return
+		}
+		const result = await this.service.revertLatest(themeName, appVersion, version)
 		res.status(200).json(result)
 	}
 
@@ -252,5 +297,47 @@ export class AppThemesController extends ServiceController<AppThemes> {
 					{ activated: activated.result, expired: expired.result }
 				)
 			)
+	}
+
+	@Documentation.addRoute({
+		method: Methods.GET,
+		path: '/app-themes/get-latest/:themeName',
+		description: 'Get the latest version of a theme',
+		requestBody: {
+			type: 'object',
+			properties: {
+				appVersion: {
+					type: 'string'
+				}
+			}
+		},
+		responses: {
+			400: {
+				description: 'Invalid Request',
+				value: {
+					$ref: Documentation.getRef(Result)
+				}
+			},
+			200: {
+				description: 'Screen Reverted',
+				value: {
+					$ref: Documentation.getRef(Result)
+				}
+			}
+		}
+	})
+	async getLatestTheme(req: Request, res: Response) {
+		const { appVersion } = req.query
+		if (!req.query.themeName || !appVersion) {
+			res
+				.status(400)
+				.json(new Result(true, ErrorCode.BadRequest, 'themeName and appVersion are required'))
+			return
+		}
+		const result = await this.service.getLatestTheme(
+			req.query.themeName.toString(),
+			appVersion.toString()
+		)
+		res.status(result.getStatus()).json(result)
 	}
 }

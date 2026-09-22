@@ -15,11 +15,9 @@ export class AppThemesService extends Service<AppThemes> {
 		this.dao = dao
 	}
 
-	async deployTheme(themeName: string, themeJson: string) {
-		if (!themeName || !themeJson) return
-
+	async deployTheme(themeName: string, themeJson: string, appVersion: string) {
 		const lastDeployed = await this.dao.readMany({
-			where: { themeName },
+			where: { themeName, supportedAppVersion: appVersion },
 			page: 1,
 			count: 3,
 			field: 'version',
@@ -47,6 +45,23 @@ export class AppThemesService extends Service<AppThemes> {
 			}
 		}
 
+		const checkOlderScreens = await this.dao.readMany({
+			where: { themeName },
+			page: 1,
+			count: 3,
+			field: 'version',
+			order: 'DESC'
+		})
+
+		if (
+			!checkOlderScreens.status.error &&
+			checkOlderScreens.result &&
+			checkOlderScreens.result.length > 0
+		) {
+			log.debug('checking older screens', 'AppThemesService/deployScreen', checkOlderScreens)
+			newVersion = checkOlderScreens.result[0].version + 1
+		}
+
 		log.debug('creating new app screen version', 'AppThemesService/deployScreen', {
 			themeName,
 			version: newVersion
@@ -57,6 +72,7 @@ export class AppThemesService extends Service<AppThemes> {
 			themeJson,
 			version: newVersion,
 			isLatest: true,
+			supportedAppVersion: appVersion,
 			lastDeployed: new Date().toISOString()
 		})
 	}
@@ -64,19 +80,13 @@ export class AppThemesService extends Service<AppThemes> {
 	async scheduleDeployTheme(
 		themeName: string,
 		themeJson: string,
-		scheduleStartDate?: string,
-		scheduleEndDate?: string,
-		makeLatest = false
+		scheduleStartDate: string,
+		scheduleEndDate: string,
+		makeLatest = false,
+		appVersion: string
 	) {
-		if (!themeName) return new Result(true, ErrorCode.BadRequest, 'themeName are required')
-		if (!themeJson) return new Result(true, ErrorCode.BadRequest, 'themeJson are required')
-		if (!scheduleStartDate)
-			return new Result(true, ErrorCode.BadRequest, 'scheduleStartDate are required')
-		if (!scheduleEndDate)
-			return new Result(true, ErrorCode.BadRequest, 'scheduleEndDate are required')
-
 		const lastDeployed = await this.dao.readMany({
-			where: { themeName },
+			where: { themeName, supportedAppVersion: appVersion },
 			page: 1,
 			count: 3,
 			field: 'version',
@@ -104,6 +114,23 @@ export class AppThemesService extends Service<AppThemes> {
 			}
 		}
 
+		const checkOlderScreens = await this.dao.readMany({
+			where: { themeName },
+			page: 1,
+			count: 3,
+			field: 'version',
+			order: 'DESC'
+		})
+
+		if (
+			!checkOlderScreens.status.error &&
+			checkOlderScreens.result &&
+			checkOlderScreens.result.length > 0
+		) {
+			log.debug('checking older screens', 'AppThemesService/deployScreen', checkOlderScreens)
+			newVersion = checkOlderScreens.result[0].version + 1
+		}
+
 		log.debug('creating new app screen version', 'AppThemesService/deployScreen', {
 			themeName,
 			version: newVersion
@@ -116,16 +143,15 @@ export class AppThemesService extends Service<AppThemes> {
 			scheduleEndDate,
 			version: newVersion,
 			isLatest: makeLatest,
+			supportedAppVersion: appVersion,
 			lastDeployed: new Date().toISOString()
 		})
 	}
 
-	async revertLatest(themeName: string, version?: number) {
-		if (!themeName) {
-			return new Result(true, ErrorCode.BadRequest, 'themeName is required')
-		}
-
-		const latest = await this.dao.read({ where: { themeName, isLatest: true } })
+	async revertLatest(themeName: string, appVersion: string, version?: number) {
+		const latest = await this.dao.read({
+			where: { themeName, supportedAppVersion: appVersion, isLatest: true }
+		})
 
 		if (latest.status.error || !latest.result) {
 			log.debug('screen not found', 'AppThemesService/revertLatest', latest)
@@ -137,7 +163,7 @@ export class AppThemesService extends Service<AppThemes> {
 			return new Result(true, ErrorCode.BadRequest, 'version is already latest')
 		}
 		const updateResult = await this.dao.update(
-			{ themeName, version: version ?? latest.result.version - 1 },
+			{ themeName, supportedAppVersion: appVersion, version: version ?? latest.result.version - 1 },
 			{ isLatest: true }
 		)
 		log.debug('updateResult', 'AppThemesService/revertLatest', {
@@ -240,5 +266,12 @@ export class AppThemesService extends Service<AppThemes> {
 			log.error('error expiring scheduled themes', 'AppThemesService/expireScheduled', error)
 			return new Result(true, ErrorCode.InternalServerError, 'Error expiring scheduled themes')
 		}
+	}
+
+	async getLatestTheme(themeName: string, appVersion: string) {
+		const latest = await this.dao.read({
+			where: { themeName, supportedAppVersion: appVersion, isLatest: true }
+		})
+		return latest
 	}
 }

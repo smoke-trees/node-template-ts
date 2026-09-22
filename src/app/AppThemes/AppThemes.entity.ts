@@ -27,15 +27,19 @@ export class AppThemes extends BaseEntity implements IAppThemes {
 
 	@Documentation.addField({ type: 'string' })
 	@Column({ name: 'schedule_start_date', type: 'timestamp without time zone', nullable: true })
-	scheduleStartDate!: string
+	scheduleStartDate?: string
 
 	@Documentation.addField({ type: 'string' })
 	@Column({ name: 'schedule_end_date', type: 'timestamp without time zone', nullable: true })
-	scheduleEndDate!: string
+	scheduleEndDate?: string
 
 	@Documentation.addField({ type: 'string' })
 	@Column({ name: 'last_deployed', type: 'timestamp without time zone', nullable: true })
 	lastDeployed!: string
+
+	@Documentation.addField({ type: 'string' })
+	@Column({ name: 'supported_app_version', type: 'varchar', nullable: true }) // TODO: remove nullable
+	supportedAppVersion?: string
 
 	constructor(data?: IAppThemes) {
 		super()

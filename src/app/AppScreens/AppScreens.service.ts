@@ -15,12 +15,9 @@ export class AppScreensService extends Service<AppScreens> {
 		this.dao = dao
 	}
 
-	async deployScreen(screenName: string, screenJson: string) {
-		if (!screenName || !screenJson)
-			return new Result(true, ErrorCode.BadRequest, 'screenName and screenJson are required')
-
+	async deployScreen(screenName: string, screenJson: string, appVersion: string) {
 		const lastDeployed = await this.dao.readMany({
-			where: { screenName },
+			where: { screenName, supportedAppVersion: appVersion },
 			page: 1,
 			count: 3,
 			field: 'version',
@@ -46,6 +43,23 @@ export class AppScreensService extends Service<AppScreens> {
 			}
 		}
 
+		const checkOlderScreens = await this.dao.readMany({
+			where: { screenName },
+			page: 1,
+			count: 3,
+			field: 'version',
+			order: 'DESC'
+		})
+
+		if (
+			!checkOlderScreens.status.error &&
+			checkOlderScreens.result &&
+			checkOlderScreens.result.length > 0
+		) {
+			log.debug('checking older screens', 'AppScreensService/deployScreen', checkOlderScreens)
+			newVersion = checkOlderScreens.result[0].version + 1
+		}
+
 		log.debug('creating new app screen version', 'AppScreensService/deployScreen', {
 			screenName,
 			version: newVersion
@@ -56,6 +70,7 @@ export class AppScreensService extends Service<AppScreens> {
 			screenJson,
 			version: newVersion,
 			isLatest: true,
+			supportedAppVersion: appVersion,
 			lastDeployed: new Date().toISOString()
 		})
 	}
@@ -65,17 +80,11 @@ export class AppScreensService extends Service<AppScreens> {
 		screenJson: string,
 		scheduleStartDate: string,
 		scheduleEndDate: string,
-		makeLatest = false
+		makeLatest = false,
+		appVersion: string
 	) {
-		if (!screenName) return new Result(true, ErrorCode.BadRequest, 'screenName are required')
-		if (!screenJson) return new Result(true, ErrorCode.BadRequest, 'screenJson are required')
-		if (!scheduleStartDate)
-			return new Result(true, ErrorCode.BadRequest, 'scheduleStartDate are required')
-		if (!scheduleEndDate)
-			return new Result(true, ErrorCode.BadRequest, 'scheduleEndDate are required')
-
 		const lastDeployed = await this.dao.readMany({
-			where: { screenName },
+			where: { screenName, supportedAppVersion: appVersion },
 			page: 1,
 			count: 3,
 			field: 'version',
@@ -103,6 +112,23 @@ export class AppScreensService extends Service<AppScreens> {
 			}
 		}
 
+		const checkOlderScreens = await this.dao.readMany({
+			where: { screenName },
+			page: 1,
+			count: 3,
+			field: 'version',
+			order: 'DESC'
+		})
+
+		if (
+			!checkOlderScreens.status.error &&
+			checkOlderScreens.result &&
+			checkOlderScreens.result.length > 0
+		) {
+			log.debug('checking older screens', 'AppScreensService/deployScreen', checkOlderScreens)
+			newVersion = checkOlderScreens.result[0].version + 1
+		}
+
 		log.debug('creating new app screen version', 'AppScreensService/deployScreen', {
 			screenName,
 			version: newVersion
@@ -115,16 +141,15 @@ export class AppScreensService extends Service<AppScreens> {
 			scheduleEndDate: scheduleEndDate,
 			version: newVersion,
 			isLatest: makeLatest,
+			supportedAppVersion: appVersion,
 			lastDeployed: new Date().toISOString()
 		})
 	}
 
-	async revertLatest(screenName: string, version?: number) {
-		if (!screenName) {
-			return new Result(true, ErrorCode.BadRequest, 'screenName is required')
-		}
-
-		const latest = await this.dao.read({ where: { screenName, isLatest: true } })
+	async revertLatest(screenName: string, appVersion: string, version?: number) {
+		const latest = await this.dao.read({
+			where: { screenName, isLatest: true, supportedAppVersion: appVersion }
+		})
 
 		if (latest.status.error || !latest.result) {
 			log.debug('screen not found', 'AppScreensService/revertLatest', latest)
@@ -240,5 +265,12 @@ export class AppScreensService extends Service<AppScreens> {
 			log.error('error expiring scheduled screens', 'AppScreensService/expireScheduled', error)
 			return new Result(true, ErrorCode.InternalServerError, 'Error expiring scheduled screens')
 		}
+	}
+
+	async getLatestScreen(screenName: string, appVersion: string) {
+		const latest = await this.dao.read({
+			where: { screenName, supportedAppVersion: appVersion, isLatest: true }
+		})
+		return latest
 	}
 }
