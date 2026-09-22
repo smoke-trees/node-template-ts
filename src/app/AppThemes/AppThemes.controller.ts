@@ -85,7 +85,7 @@ export class AppThemesController extends ServiceController<AppThemes> {
 			{
 				handler: this.getLatestTheme.bind(this),
 				method: Methods.GET,
-				path: '/get-latest/:themeName',
+				path: '/get-latest',
 				localMiddleware: [
 					// TODO: App routes auth
 				]
@@ -301,16 +301,26 @@ export class AppThemesController extends ServiceController<AppThemes> {
 
 	@Documentation.addRoute({
 		method: Methods.GET,
-		path: '/app-themes/get-latest/:themeName',
+		path: '/app-themes/get-latest',
 		description: 'Get the latest version of a theme',
-		requestBody: {
-			type: 'object',
-			properties: {
-				appVersion: {
+		parameters: [
+			{
+				name: 'themeName',
+				in: 'query',
+				required: true,
+				schema: {
+					type: 'string'
+				}
+			},
+			{
+				name: 'appVersion',
+				in: 'query',
+				required: true,
+				schema: {
 					type: 'string'
 				}
 			}
-		},
+		],
 		responses: {
 			400: {
 				description: 'Invalid Request',
@@ -327,17 +337,14 @@ export class AppThemesController extends ServiceController<AppThemes> {
 		}
 	})
 	async getLatestTheme(req: Request, res: Response) {
-		const { appVersion } = req.query
-		if (!req.query.themeName || !appVersion) {
+		const { themeName, appVersion } = req.query
+		if (!themeName || !appVersion) {
 			res
 				.status(400)
 				.json(new Result(true, ErrorCode.BadRequest, 'themeName and appVersion are required'))
 			return
 		}
-		const result = await this.service.getLatestTheme(
-			req.query.themeName.toString(),
-			appVersion.toString()
-		)
+		const result = await this.service.getLatestTheme(themeName.toString(), appVersion.toString())
 		res.status(result.getStatus()).json(result)
 	}
 }

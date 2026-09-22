@@ -85,7 +85,7 @@ export class AppScreensController extends ServiceController<AppScreens> {
 			{
 				handler: this.getLatestScreen.bind(this),
 				method: Methods.GET,
-				path: '/get-latest/:screenName',
+				path: '/get-latest',
 				localMiddleware: [
 					// TODO: App routes auth
 				]
@@ -375,16 +375,26 @@ export class AppScreensController extends ServiceController<AppScreens> {
 
 	@Documentation.addRoute({
 		method: Methods.GET,
-		path: '/app-screens/get-latest/:screenName',
+		path: '/app-screens/get-latest',
 		description: 'Get the latest version of a screen',
-		requestBody: {
-			type: 'object',
-			properties: {
-				appVersion: {
+		parameters: [
+			{
+				name: 'screenName',
+				in: 'query',
+				required: true,
+				schema: {
+					type: 'string'
+				}
+			},
+			{
+				name: 'appVersion',
+				in: 'query',
+				required: true,
+				schema: {
 					type: 'string'
 				}
 			}
-		},
+		],
 		responses: {
 			400: {
 				description: 'Invalid Request',
@@ -401,17 +411,14 @@ export class AppScreensController extends ServiceController<AppScreens> {
 		}
 	})
 	async getLatestScreen(req: Request, res: Response) {
-		const { appVersion } = req.query
-		if (!req.query.screenName || !appVersion) {
+		const { screenName, appVersion } = req.query
+		if (!screenName || !appVersion) {
 			res
 				.status(400)
 				.json(new Result(true, ErrorCode.BadRequest, 'screenName and appVersion are required'))
 			return
 		}
-		const result = await this.service.getLatestScreen(
-			req.query.screenName.toString(),
-			appVersion.toString()
-		)
+		const result = await this.service.getLatestScreen(screenName.toString(), appVersion.toString())
 		res.status(result.getStatus()).json(result)
 	}
 }
