@@ -67,9 +67,9 @@ export class AppScreensController extends ServiceController<AppScreens> {
 				]
 			},
 			{
-				handler: this.revertScreen.bind(this),
+				handler: this.activateJson.bind(this),
 				method: Methods.POST,
-				path: '/revert',
+				path: '/activate-json',
 				localMiddleware: [
 					// TODO: App routes auth
 				]
@@ -108,6 +108,15 @@ export class AppScreensController extends ServiceController<AppScreens> {
 				screenJson: {
 					type: 'string'
 				},
+				jsonVersion: {
+					type: 'string'
+				},
+				minAppVersion: {
+					type: 'string'
+				},
+				maxAppVersion: {
+					type: 'string'
+				},
 				appVersion: {
 					type: 'string'
 				}
@@ -129,21 +138,29 @@ export class AppScreensController extends ServiceController<AppScreens> {
 		}
 	})
 	async deployScreen(req: Request, res: Response) {
-		const { screenName, screenJson, appVersion } = req.body
-		if (!screenName || !screenJson || !appVersion) {
+		const { screenName, screenJson, jsonVersion, minAppVersion, maxAppVersion, appVersion } =
+			req.body
+		const minVersion = minAppVersion ?? appVersion
+		if (!screenName || !screenJson || !jsonVersion || !minVersion) {
 			res
 				.status(400)
 				.json(
 					new Result(
 						true,
 						ErrorCode.BadRequest,
-						'screenName, screenJson and appVersion are required'
+						'screenName, screenJson, jsonVersion and minAppVersion (or appVersion) are required'
 					)
 				)
 			return
 		}
-		const result = await this.service.deployScreen(screenName, screenJson, appVersion)
-		res.status(200).json(result)
+		const result = await this.service.deployScreen(
+			screenName,
+			screenJson,
+			jsonVersion,
+			minVersion,
+			maxAppVersion
+		)
+		res.status(result.getStatus()).json(result)
 	}
 
 	@Documentation.addRoute({
@@ -159,6 +176,9 @@ export class AppScreensController extends ServiceController<AppScreens> {
 				screenJson: {
 					type: 'string'
 				},
+				jsonVersion: {
+					type: 'string'
+				},
 				scheduleStartDate: {
 					type: 'string'
 				},
@@ -167,6 +187,12 @@ export class AppScreensController extends ServiceController<AppScreens> {
 				},
 				makeLatest: {
 					type: 'boolean'
+				},
+				minAppVersion: {
+					type: 'string'
+				},
+				maxAppVersion: {
+					type: 'string'
 				},
 				appVersion: {
 					type: 'string'
@@ -189,17 +215,34 @@ export class AppScreensController extends ServiceController<AppScreens> {
 		}
 	})
 	async scheduleDeployScreen(req: Request, res: Response) {
-		const { screenName, screenJson, scheduleStartDate, scheduleEndDate, makeLatest, appVersion } =
-			req.body
+		const {
+			screenName,
+			screenJson,
+			jsonVersion,
+			scheduleStartDate,
+			scheduleEndDate,
+			makeLatest,
+			minAppVersion,
+			maxAppVersion,
+			appVersion
+		} = req.body
+		const minVersion = minAppVersion ?? appVersion
 
-		if (!screenName || !screenJson || !appVersion || !scheduleStartDate || !scheduleEndDate) {
+		if (
+			!screenName ||
+			!screenJson ||
+			!jsonVersion ||
+			!minVersion ||
+			!scheduleStartDate ||
+			!scheduleEndDate
+		) {
 			res
 				.status(400)
 				.json(
 					new Result(
 						true,
 						ErrorCode.BadRequest,
-						'screenName, screenJson, scheduleStartDate, scheduleEndDate and appVersion are required'
+						'screenName, screenJson, jsonVersion, minAppVersion (or appVersion), scheduleStartDate and scheduleEndDate are required'
 					)
 				)
 			return
@@ -208,12 +251,14 @@ export class AppScreensController extends ServiceController<AppScreens> {
 		const result = await this.service.scheduleDeployScreen(
 			screenName,
 			screenJson,
+			jsonVersion,
 			scheduleStartDate,
 			scheduleEndDate,
-			makeLatest,
-			appVersion
+			minVersion,
+			makeLatest ?? false,
+			maxAppVersion
 		)
-		res.status(200).json(result)
+		res.status(result.getStatus()).json(result)
 	}
 
 	@Documentation.addRoute({
@@ -249,18 +294,16 @@ export class AppScreensController extends ServiceController<AppScreens> {
 			}
 		}
 	})
-	async revertScreen(req: Request, res: Response) {
-		const { screenName, appVersion, version } = req.body
+	async activateJson(req: Request, res: Response) {
+		const { id } = req.body
 
-		if (!screenName || !appVersion) {
-			res
-				.status(400)
-				.json(new Result(true, ErrorCode.BadRequest, 'screenName and appVersion are required'))
+		if (!id) {
+			res.status(400).json(new Result(true, ErrorCode.BadRequest, 'id is required'))
 			return
 		}
 
-		const result = await this.service.revertLatest(screenName, appVersion, version)
-		res.status(200).json(result)
+		const result = await this.service.activateJson(id)
+		res.status(result.getStatus()).json(result)
 	}
 
 	@Documentation.addRoute({
@@ -337,7 +380,7 @@ export class AppScreensController extends ServiceController<AppScreens> {
 	async activateCron(req: Request, res: Response) {
 		const { date } = req.body ?? {}
 		const result = await this.service.activateScheduled(date)
-		res.status(200).json(result)
+		res.status(result.getStatus()).json(result)
 	}
 
 	@Documentation.addRoute({
@@ -370,7 +413,7 @@ export class AppScreensController extends ServiceController<AppScreens> {
 	async expireCron(req: Request, res: Response) {
 		const { date } = req.body ?? {}
 		const result = await this.service.expireScheduled(date)
-		res.status(200).json(result)
+		res.status(result.getStatus()).json(result)
 	}
 
 	@Documentation.addRoute({

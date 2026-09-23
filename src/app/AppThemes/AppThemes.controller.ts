@@ -67,9 +67,9 @@ export class AppThemesController extends ServiceController<AppThemes> {
 				]
 			},
 			{
-				handler: this.revertTheme.bind(this),
+				handler: this.activateJson.bind(this),
 				method: Methods.POST,
-				path: '/revert',
+				path: '/activate-json',
 				localMiddleware: [
 					// TODO: App routes auth
 				]
@@ -108,6 +108,15 @@ export class AppThemesController extends ServiceController<AppThemes> {
 				themeJson: {
 					type: 'string'
 				},
+				jsonVersion: {
+					type: 'string'
+				},
+				minAppVersion: {
+					type: 'string'
+				},
+				maxAppVersion: {
+					type: 'string'
+				},
 				appVersion: {
 					type: 'string'
 				}
@@ -129,17 +138,28 @@ export class AppThemesController extends ServiceController<AppThemes> {
 		}
 	})
 	async deployTheme(req: Request, res: Response) {
-		const { themeName, themeJson, appVersion } = req.body
-		if (!themeName || !themeJson || !appVersion) {
+		const { themeName, themeJson, jsonVersion, minAppVersion, maxAppVersion, appVersion } = req.body
+		const minVersion = minAppVersion ?? appVersion
+		if (!themeName || !themeJson || !jsonVersion || !minVersion) {
 			res
 				.status(400)
 				.json(
-					new Result(true, ErrorCode.BadRequest, 'themeName, themeJson and appVersion are required')
+					new Result(
+						true,
+						ErrorCode.BadRequest,
+						'themeName, themeJson, jsonVersion and minAppVersion (or appVersion) are required'
+					)
 				)
 			return
 		}
-		const result = await this.service.deployTheme(themeName, themeJson, appVersion)
-		res.status(200).json(result)
+		const result = await this.service.deployTheme(
+			themeName,
+			themeJson,
+			jsonVersion,
+			minVersion,
+			maxAppVersion
+		)
+		res.status(result.getStatus()).json(result)
 	}
 
 	@Documentation.addRoute({
@@ -155,6 +175,9 @@ export class AppThemesController extends ServiceController<AppThemes> {
 				themeJson: {
 					type: 'string'
 				},
+				jsonVersion: {
+					type: 'string'
+				},
 				scheduleStartDate: {
 					type: 'string'
 				},
@@ -163,6 +186,12 @@ export class AppThemesController extends ServiceController<AppThemes> {
 				},
 				makeLatest: {
 					type: 'boolean'
+				},
+				minAppVersion: {
+					type: 'string'
+				},
+				maxAppVersion: {
+					type: 'string'
 				},
 				appVersion: {
 					type: 'string'
@@ -185,45 +214,60 @@ export class AppThemesController extends ServiceController<AppThemes> {
 		}
 	})
 	async scheduleDeployTheme(req: Request, res: Response) {
-		const { themeName, themeJson, scheduleStartDate, scheduleEndDate, makeLatest, appVersion } =
-			req.body
-		if (!themeName || !themeJson || !scheduleStartDate || !scheduleEndDate || !appVersion) {
+		const {
+			themeName,
+			themeJson,
+			jsonVersion,
+			scheduleStartDate,
+			scheduleEndDate,
+			makeLatest,
+			minAppVersion,
+			maxAppVersion,
+			appVersion
+		} = req.body
+		const minVersion = minAppVersion ?? appVersion
+
+		if (
+			!themeName ||
+			!themeJson ||
+			!jsonVersion ||
+			!minVersion ||
+			!scheduleStartDate ||
+			!scheduleEndDate
+		) {
 			res
 				.status(400)
 				.json(
 					new Result(
 						true,
 						ErrorCode.BadRequest,
-						'themeName, themeJson, scheduleStartDate, scheduleEndDate and appVersion are required'
+						'themeName, themeJson, jsonVersion, minAppVersion (or appVersion), scheduleStartDate and scheduleEndDate are required'
 					)
 				)
 			return
 		}
+
 		const result = await this.service.scheduleDeployTheme(
 			themeName,
 			themeJson,
+			jsonVersion,
 			scheduleStartDate,
 			scheduleEndDate,
-			makeLatest,
-			appVersion
+			minVersion,
+			makeLatest ?? false,
+			maxAppVersion
 		)
-		res.status(200).json(result)
+		res.status(result.getStatus()).json(result)
 	}
 
 	@Documentation.addRoute({
 		method: Methods.POST,
-		path: '/app-themes/revert',
-		description: 'Revert to latest version',
+		path: '/app-themes/activate-json',
+		description: 'Activate a theme json by id',
 		requestBody: {
 			type: 'object',
 			properties: {
-				themeName: {
-					type: 'string'
-				},
-				version: {
-					type: 'number'
-				},
-				appVersion: {
+				id: {
 					type: 'string'
 				}
 			}
@@ -243,16 +287,16 @@ export class AppThemesController extends ServiceController<AppThemes> {
 			}
 		}
 	})
-	async revertTheme(req: Request, res: Response) {
-		const { themeName, version, appVersion } = req.body
-		if (!themeName || !appVersion) {
-			res
-				.status(400)
-				.json(new Result(true, ErrorCode.BadRequest, 'themeName and appVersion are required'))
+	async activateJson(req: Request, res: Response) {
+		const { id } = req.body
+
+		if (!id) {
+			res.status(400).json(new Result(true, ErrorCode.BadRequest, 'id is required'))
 			return
 		}
-		const result = await this.service.revertLatest(themeName, appVersion, version)
-		res.status(200).json(result)
+
+		const result = await this.service.activateJson(id)
+		res.status(result.getStatus()).json(result)
 	}
 
 	@Documentation.addRoute({
@@ -300,6 +344,72 @@ export class AppThemesController extends ServiceController<AppThemes> {
 	}
 
 	@Documentation.addRoute({
+		method: Methods.POST,
+		path: '/app-themes/schedule-cron/activate',
+		description: 'Testing route: send a date, schedules active on it become isLatest',
+		requestBody: {
+			type: 'object',
+			properties: {
+				date: {
+					type: 'string'
+				}
+			}
+		},
+		responses: {
+			400: {
+				description: 'Invalid Request',
+				value: {
+					$ref: Documentation.getRef(Result)
+				}
+			},
+			200: {
+				description: 'Scheduled Themes Activated',
+				value: {
+					$ref: Documentation.getRef(Result)
+				}
+			}
+		}
+	})
+	async activateCron(req: Request, res: Response) {
+		const { date } = req.body ?? {}
+		const result = await this.service.activateScheduled(date)
+		res.status(result.getStatus()).json(result)
+	}
+
+	@Documentation.addRoute({
+		method: Methods.POST,
+		path: '/app-themes/schedule-cron/expire',
+		description: 'Testing route: send a date, schedules ended before it lose isLatest',
+		requestBody: {
+			type: 'object',
+			properties: {
+				date: {
+					type: 'string'
+				}
+			}
+		},
+		responses: {
+			400: {
+				description: 'Invalid Request',
+				value: {
+					$ref: Documentation.getRef(Result)
+				}
+			},
+			200: {
+				description: 'Expired Schedules Cleared',
+				value: {
+					$ref: Documentation.getRef(Result)
+				}
+			}
+		}
+	})
+	async expireCron(req: Request, res: Response) {
+		const { date } = req.body ?? {}
+		const result = await this.service.expireScheduled(date)
+		res.status(result.getStatus()).json(result)
+	}
+
+	@Documentation.addRoute({
 		method: Methods.GET,
 		path: '/app-themes/get-latest',
 		description: 'Get the latest version of a theme',
@@ -329,7 +439,7 @@ export class AppThemesController extends ServiceController<AppThemes> {
 				}
 			},
 			200: {
-				description: 'Screen Reverted',
+				description: 'Theme Reverted',
 				value: {
 					$ref: Documentation.getRef(Result)
 				}

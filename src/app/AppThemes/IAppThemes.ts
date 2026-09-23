@@ -2,10 +2,12 @@ export interface IAppThemes {
 	id: string
 	themeName: string
 	themeJson: string
-	version: number
-	isLatest: boolean
+	jsonVersion: string
+	isActive: boolean
 	scheduleStartDate?: string
 	scheduleEndDate?: string
 	lastDeployed: string
-	supportedAppVersion?: string
+	minAppVersion: string
+	maxAppVersion?: string
+	versionNote?: string
 }
