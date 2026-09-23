@@ -335,19 +335,9 @@ export class AppScreensController extends ServiceController<AppScreens> {
 	})
 	async scheduleCron(req: Request, res: Response) {
 		const { date } = req.body ?? {}
-		const activated = await this.service.activateScheduled(date)
-		const expired = await this.service.expireScheduled(date)
-		const hasError = activated.status.error || expired.status.error
-		res
-			.status(200)
-			.json(
-				new Result(
-					hasError,
-					hasError ? ErrorCode.InternalServerError : ErrorCode.Success,
-					'Schedule cron completed',
-					{ activated: activated.result, expired: expired.result }
-				)
-			)
+		res.status(200).json({ message: 'Schedule cron started' })
+		await this.service.activateScheduled(date)
+		await this.service.expireScheduled(date)
 	}
 
 	@Documentation.addRoute({
