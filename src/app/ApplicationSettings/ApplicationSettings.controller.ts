@@ -17,22 +17,7 @@ export class ApplicationSettingsController extends ServiceController<Application
 		@inject(ApplicationSettingsService)
 		service: ApplicationSettingsService
 	) {
-		super(
-			app,
-			ApplicationSettings,
-			service,
-			{
-				paths: {}
-			},
-			{
-				create: [],
-				update: [],
-				read: [],
-				readMany: [],
-				readManyWithoutPagination: [],
-				delete: []
-			}
-		)
+		super(app, ApplicationSettings, service)
 		this.service = service
 		this.addRoutes()
 		this.loadDocumentation()

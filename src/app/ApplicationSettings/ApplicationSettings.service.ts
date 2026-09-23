@@ -1,11 +1,11 @@
 import { Service } from '@smoke-trees/postgres-backend'
 import { inject } from 'inversify'
 import { ApplicationSettingsDao } from './ApplicationSettings.dao'
-import { ApplicationSettings, SettingTypes } from './ApplicationSettings.entity'
+import { ApplicationSettings } from './ApplicationSettings.entity'
+import { SettingTypes } from './IApplicationSettings'
 
 export class ApplicationSettingsService extends Service<ApplicationSettings> {
 	dao: ApplicationSettingsDao
-	/* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
 	settings: any
 	constructor(
 		@inject(ApplicationSettingsDao)
@@ -13,7 +13,6 @@ export class ApplicationSettingsService extends Service<ApplicationSettings> {
 	) {
 		super(dao)
 		this.dao = dao
-		/* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
 		this.settings = {} as any
 	}
 

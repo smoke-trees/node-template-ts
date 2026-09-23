@@ -1,30 +1,12 @@
 import { BaseEntity, Documentation } from '@smoke-trees/postgres-backend'
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
-import { Optional } from '../../types'
-
-export enum SettingTypes {
-	STRING = 'string',
-	NUMBER = 'number',
-	BOOLEAN = 'boolean',
-	JSON = 'json',
-	ARRAY = 'array'
-}
-
-export interface IApplicationSettings {
-	id: string
-	name: string
-	value: string
-	type: SettingTypes
-	isPublic: boolean
-}
-
-export type IApplicationSettingsCreate = Optional<IApplicationSettings, 'id'>
+import { IApplicationSettings, SettingTypes } from './IApplicationSettings'
 
 @Documentation.addSchema()
 @Entity({ name: 'application_settings' })
-export class ApplicationSettings extends BaseEntity {
+export class ApplicationSettings extends BaseEntity implements IApplicationSettings {
 	@Documentation.addField({ type: 'string' })
-	@PrimaryGeneratedColumn('uuid', { name: 'id' })
+	@PrimaryGeneratedColumn('uuid')
 	id!: string
 
 	@Documentation.addField({ type: 'string' })
@@ -41,20 +23,20 @@ export class ApplicationSettings extends BaseEntity {
 		default: SettingTypes.STRING
 	})
 	@Column({ type: 'enum', enum: SettingTypes, default: SettingTypes.STRING })
-	type!: string
+	type!: SettingTypes
 
 	@Documentation.addField({ type: 'string' })
 	@Column({ type: 'boolean', nullable: true, default: false })
 	isPublic!: boolean
 
-	constructor(it?: IApplicationSettingsCreate) {
-		super(it)
-		if (it) {
-			if (it.id) this.id = it.id
-			this.name = it.name
-			this.value = it.value
-			this.type = it.type
-			this.isPublic = it.isPublic
+	constructor(data?: IApplicationSettings) {
+		super()
+		if (data) {
+			if (data.id) this.id = data.id
+			this.name = data.name
+			this.value = data.value
+			this.type = data.type
+			this.isPublic = data.isPublic
 		}
 	}
 }
