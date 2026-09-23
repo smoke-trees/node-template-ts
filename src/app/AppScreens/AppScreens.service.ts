@@ -40,28 +40,28 @@ export class AppScreensService extends Service<AppScreens> {
 				return new Result(true, ErrorCode.BadRequest, 'jsonVersion must be in x.y.z format')
 			}
 			const prepared = await this.prepareRange(screenName, minAppVersion, maxAppVersion)
-			if (!prepared.ok) return prepared.result
+			if (prepared.status.error || !prepared.result) return prepared
 			await this.applyOverlapResolution(
 				screenName,
-				prepared.bands,
-				prepared.newMin,
-				prepared.normalizedMin,
-				prepared.effectiveMaxParsed
+				prepared.result.bands,
+				prepared.result.newMin,
+				prepared.result.normalizedMin,
+				prepared.result.effectiveMaxParsed
 			)
 			const created = await this.dao.create({
 				screenName,
 				screenJson,
 				jsonVersion: `${parsedJson[0]}.${parsedJson[1]}.${parsedJson[2]}`,
-				minAppVersion: prepared.normalizedMin,
-				maxAppVersion: prepared.effectiveMax,
+				minAppVersion: prepared.result.normalizedMin,
+				maxAppVersion: prepared.result.effectiveMax,
 				isActive: true,
 				lastDeployed: new Date().toISOString()
 			})
 			log.info('deployed screen', 'AppScreensService/deployScreen', {
 				screenName,
 				jsonVersion,
-				minAppVersion: prepared.normalizedMin,
-				maxAppVersion: prepared.effectiveMax
+				minAppVersion: prepared.result.normalizedMin,
+				maxAppVersion: prepared.result.effectiveMax
 			})
 			return created
 		} catch (error) {
@@ -121,14 +121,14 @@ export class AppScreensService extends Service<AppScreens> {
 				)
 			}
 			const prepared = await this.prepareRange(screenName, minAppVersion, maxAppVersion)
-			if (!prepared.ok) return prepared.result
+			if (prepared.status.error || !prepared.result) return prepared
 			if (makeLatest) {
 				await this.applyOverlapResolution(
 					screenName,
-					prepared.bands,
-					prepared.newMin,
-					prepared.normalizedMin,
-					prepared.effectiveMaxParsed
+					prepared.result.bands,
+					prepared.result.newMin,
+					prepared.result.normalizedMin,
+					prepared.result.effectiveMaxParsed
 				)
 			}
 			const created = await this.dao.create({
@@ -137,8 +137,8 @@ export class AppScreensService extends Service<AppScreens> {
 				jsonVersion: `${parsedJson[0]}.${parsedJson[1]}.${parsedJson[2]}`,
 				scheduleStartDate: scheduleStartDate,
 				scheduleEndDate: scheduleEndDate,
-				minAppVersion: prepared.normalizedMin,
-				maxAppVersion: prepared.effectiveMax,
+				minAppVersion: prepared.result.normalizedMin,
+				maxAppVersion: prepared.result.effectiveMax,
 				isActive: makeLatest,
 				lastDeployed: new Date().toISOString()
 			})
@@ -444,10 +444,7 @@ export class AppScreensService extends Service<AppScreens> {
 		const newMin = this.parseVersion(minAppVersion)
 		if (!newMin) {
 			log.warn('invalid minAppVersion', 'AppScreensService/prepareRange', { minAppVersion })
-			return {
-				ok: false as const,
-				result: new Result(true, ErrorCode.BadRequest, 'minAppVersion must be in x.y.z format')
-			}
+			return new Result(true, ErrorCode.BadRequest, 'minAppVersion must be in x.y.z format')
 		}
 		const normalizedMin = `${newMin[0]}.${newMin[1]}.${newMin[2]}`
 		let newMaxParsed: number[] | null = null
@@ -456,24 +453,18 @@ export class AppScreensService extends Service<AppScreens> {
 			newMaxParsed = this.parseVersion(maxAppVersion)
 			if (!newMaxParsed) {
 				log.warn('invalid maxAppVersion', 'AppScreensService/prepareRange', { maxAppVersion })
-				return {
-					ok: false as const,
-					result: new Result(true, ErrorCode.BadRequest, 'maxAppVersion must be in x.y.z format')
-				}
+				return new Result(true, ErrorCode.BadRequest, 'maxAppVersion must be in x.y.z format')
 			}
 			if (this.compareVersions(newMin, newMaxParsed) > 0) {
 				log.warn('minAppVersion greater than maxAppVersion', 'AppScreensService/prepareRange', {
 					minAppVersion,
 					maxAppVersion
 				})
-				return {
-					ok: false as const,
-					result: new Result(
-						true,
-						ErrorCode.BadRequest,
-						'minAppVersion cannot be greater than maxAppVersion'
-					)
-				}
+				return new Result(
+					true,
+					ErrorCode.BadRequest,
+					'minAppVersion cannot be greater than maxAppVersion'
+				)
 			}
 			normalizedMax = `${newMaxParsed[0]}.${newMaxParsed[1]}.${newMaxParsed[2]}`
 		}
@@ -482,7 +473,7 @@ export class AppScreensService extends Service<AppScreens> {
 			nonPaginated: true,
 			select: { id: true, minAppVersion: true, maxAppVersion: true }
 		})
-		const rows = !activeResult.status.error && activeResult.result ? activeResult.result : []
+		const rows = activeResult.result ?? []
 		const bands: { id: string; min: number[]; max: number[] | null }[] = []
 		let nextMin: number[] | null = null
 		let nextMinRaw: string | null = null
@@ -514,14 +505,7 @@ export class AppScreensService extends Service<AppScreens> {
 					minAppVersion,
 					nextMin: nextMinRaw
 				})
-				return {
-					ok: false as const,
-					result: new Result(
-						true,
-						ErrorCode.BadRequest,
-						'cannot deploy unbounded range before 0.0.0'
-					)
-				}
+				return new Result(true, ErrorCode.BadRequest, 'cannot deploy unbounded range before 0.0.0')
 			}
 			if (this.compareVersions(newMin, cappedParsed) > 0) {
 				log.warn('new range is empty after capping', 'AppScreensService/prepareRange', {
@@ -529,14 +513,11 @@ export class AppScreensService extends Service<AppScreens> {
 					minAppVersion,
 					nextMin: nextMinRaw
 				})
-				return {
-					ok: false as const,
-					result: new Result(
-						true,
-						ErrorCode.BadRequest,
-						'new range is empty, a higher active range already covers it'
-					)
-				}
+				return new Result(
+					true,
+					ErrorCode.BadRequest,
+					'new range is empty, a higher active range already covers it'
+				)
 			}
 			effectiveMax = capped
 			effectiveMaxParsed = cappedParsed
@@ -547,7 +528,13 @@ export class AppScreensService extends Service<AppScreens> {
 				nextMin: nextMinRaw
 			})
 		}
-		return { ok: true as const, bands, newMin, normalizedMin, effectiveMax, effectiveMaxParsed }
+		return new Result(true, ErrorCode.Success, 'prepared range', {
+			bands,
+			newMin,
+			normalizedMin,
+			effectiveMax,
+			effectiveMaxParsed
+		})
 	}
 
 	async applyOverlapResolution(
