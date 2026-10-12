@@ -358,60 +358,6 @@ packages:
       }
     engines: { node: '>=14' }
 
-  '@protobufjs/aspromise@1.1.2':
-    resolution:
-      {
-        integrity: sha512-j+gKExEuLmKwvz3OgROXtrJ2UG2x8Ch2YZUxahh+s1F2HZ+wAceUNLkvy6zKCPVRkU++ZWQrdxsUeQXmcg4uoQ==
-      }
-
-  '@protobufjs/base64@1.1.2':
-    resolution:
-      {
-        integrity: sha512-AZkcAA5vnN/v4PDqKyMR5lx7hZttPDgClv83E//FMNhR2TMcLUhfRUBHCmSl0oi9zMgDDqRUJkSxO3wm85+XLg==
-      }
-
-  '@protobufjs/codegen@2.0.5':
-    resolution:
-      {
-        integrity: sha512-zgXFLzW3Ap33e6d0Wlj4MGIm6Ce8O89n/apUaGNB/jx+hw+ruWEp7EwGUshdLKVRCxZW12fp9r40E1mQrf/34g==
-      }
-
-  '@protobufjs/eventemitter@1.1.1':
-    resolution:
-      {
-        integrity: sha512-vW1GmwMZNnL+gMRaovlh9yZX74kc+TTU3FObkkurpMaRtBfLP3ldjS9KQWlwZgraRE0+dheEEoAxdzcJQ8eXZg==
-      }
-
-  '@protobufjs/fetch@1.1.1':
-    resolution:
-      {
-        integrity: sha512-GpptLrs57adMSuHi3VNj0mAF8dwh36LMaYF6XyJ6JMWlVsc+t42tm1HSEDmOs3A8fC9yyeisgLhsTVQokOZ0zw==
-      }
-
-  '@protobufjs/float@1.0.2':
-    resolution:
-      {
-        integrity: sha512-Ddb+kVXlXst9d+R9PfTIxh1EdNkgoRe5tOX6t01f1lYWOvJnSPDBlG241QLzcyPdoNTsblLUdujGSE4RzrTZGQ==
-      }
-
-  '@protobufjs/path@1.1.2':
-    resolution:
-      {
-        integrity: sha512-6JOcJ5Tm08dOHAbdR3GrvP+yUUfkjG5ePsHYczMFLq3ZmMkAD98cDgcT2iA1lJ9NVwFd4tH/iSSoe44YWkltEA==
-      }
-
-  '@protobufjs/pool@1.1.0':
-    resolution:
-      {
-        integrity: sha512-0kELaGSIDBKvcgS4zkjz1PeddatrjYcmMWOlAuAPwAeccUrPHdUqo/J6LiymHHEiJT5NrF1UVwxY14f+fy4WQw==
-      }
-
-  '@protobufjs/utf8@1.1.2':
-    resolution:
-      {
-        integrity: sha512-b1UQwcEZ4yCnMCD8DAL1VlbvBJE9/IX4FTIp7BG1xYpf29SLazLSrqUkj4w7Y5y7cCVP6E5tcqqcI0xemPkHug==
-      }
-
   '@scarf/scarf@1.4.0':
     resolution:
       {
@@ -726,65 +672,6 @@ packages:
         integrity: sha512-pWrTcoFNWuwHlA9CvlfSsGWs14JxfN1TH25zM5L7o0pRLhsoZkDnTsXfQRJBEWJoV5DL0jf+Z+sxiud+K0mq1g==
       }
     engines: { node: ^18.18.0 || ^20.9.0 || >=21.1.0 }
-
-  '@valkey/valkey-glide-darwin-arm64@2.4.2':
-    resolution:
-      {
-        integrity: sha512-ILJt4/nGWvzWbrNTUFCvOmUnUoLhOHDKAdCQBTTZtt61JRv4z1ctS8kSkHXtdiwWYCPZIsqjjIsb43HdujkuKQ==
-      }
-    cpu: [arm64]
-    os: [darwin]
-
-  '@valkey/valkey-glide-darwin-x64@2.4.2':
-    resolution:
-      {
-        integrity: sha512-qd68iRRAdQ3maWJMgf44JE6v4dk9S5mCWXcRwBa6BzjqzLNoqiHa13lf+YOzaEj4EQEPKz6leBIfQEqIs1ZNMw==
-      }
-    cpu: [x64]
-    os: [darwin]
-
-  '@valkey/valkey-glide-linux-arm64-gnu@2.4.2':
-    resolution:
-      {
-        integrity: sha512-zzstOJvpXHHZSnwBdkk3J0fz8v3+HjPGa/4PktldBTR5VZ3ZfS5+HFuXdRR6/nNpww5fcTQ0KRYdAONUWDiWsw==
-      }
-    cpu: [arm64]
-    os: [linux]
-    libc: [glibc]
-
-  '@valkey/valkey-glide-linux-arm64-musl@2.4.2':
-    resolution:
-      {
-        integrity: sha512-Li7htG1mAikPRN2v9IggIuFED6zGjMRlcYS+42qbNeXRjyYG/V4M4Y0TjAhS2qte6jRqpgCbuyEQSIVt5JSWEQ==
-      }
-    cpu: [arm64]
-    os: [linux]
-    libc: [musl]
-
-  '@valkey/valkey-glide-linux-x64-gnu@2.4.2':
-    resolution:
-      {
-        integrity: sha512-3cJfKpJSzXgsVwhNdeQcHO73L5K42V1iZaLGpLsXPwtuEO8olSu/tslN24AYgjwTM3QghOQb0k66x6JonB+3rA==
-      }
-    cpu: [x64]
-    os: [linux]
-    libc: [glibc]
-
-  '@valkey/valkey-glide-linux-x64-musl@2.4.2':
-    resolution:
-      {
-        integrity: sha512-YBPVVW84VSOFfIME6jqE6DAQKiV688oWkhjNmakJ/xm4Pxae78QWNBI0s2Rbwpfy7PQ59gJ/ZfwPVbMHOXp/vw==
-      }
-    cpu: [x64]
-    os: [linux]
-    libc: [musl]
-
-  '@valkey/valkey-glide@2.4.2':
-    resolution:
-      {
-        integrity: sha512-ugE9hxB+0QoXhix2PgmtJZqWAEFqS8iJsWRqn8dgqdBrOwKUv9LidWuEzF/WBGyYZDj9Ji/g8CvaskA2fHZvTw==
-      }
-    engines: { node: '>=16' }
 
   accepts@2.0.0:
     resolution:
@@ -1450,7 +1337,6 @@ packages:
         integrity: sha512-LSehfdpgMeWcTZkWZVIJl+tkZ2nuSkyyB9C27MZqFWXuph7DvaowgcTvKqxvpLW1JZIk8PN7hFY3Rj9LQ7m7lg==
       }
     engines: { node: ^18.18.0 || ^20.9.0 || >=21.1.0 }
-    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -1707,7 +1593,6 @@ packages:
       {
         integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==
       }
-    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   globals@14.0.0:
@@ -2077,12 +1962,6 @@ packages:
         integrity: sha512-TFYA4jnP7PVbmlBIfhlSe+WKxs9dklXMTEGcBCIvLhE/Tn3H6Gk1norupVW7m5Cnd4bLcr08AytbyV/xj7f/kQ==
       }
     engines: { node: '>= 12.0.0' }
-
-  long@5.3.2:
-    resolution:
-      {
-        integrity: sha512-mNAgZ1GmyNhD7AuqnTG3/VQ26o760+ZYBPKjPvugO8+nLbYfX6TVpJPseBvopbdY+qpZ/lKUnmEc1LeZYS3QAA==
-      }
 
   loupe@3.2.0:
     resolution:
@@ -3111,7 +2990,6 @@ packages:
       {
         integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
       }
-    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   v8-to-istanbul@9.3.0:
@@ -3243,12 +3121,6 @@ packages:
         integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
       }
     engines: { node: '>=10' }
-
-  zod@4.5.4:
-    resolution:
-      {
-        integrity: sha512-sC95tT5iHHH9gtpj6A81kh+NEaRAUFN+qlUPDUbRfOMvNf5QCBqsb3WgvnpVtK5Y+4UfA6KqufotuTvMGiTlsA==
-      }
 
 snapshots:
   '@bcoe/v8-coverage@1.0.2': {}

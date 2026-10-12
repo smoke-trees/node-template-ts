@@ -1,5 +1,6 @@
 import { Settings } from '@smoke-trees/postgres-backend'
-import './config-env'
+import dotenv from 'dotenv'
+dotenv.config()
 
 export class ApplicationSettings extends Settings {
 	databaseType: 'postgres' | 'mysql'
