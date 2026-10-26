@@ -29,6 +29,7 @@ This backend is built using the smoke-trees ecosystem, specifically leveraging `
 - Example: `@Column({ type: 'varchar', name: 'user_id'})` for `userId: string`, `@Column({ type: 'boolean', name: 'is_active', default: true})` for `isActive: boolean`, `@Column({ type: 'varchar', name: 'first_name', nullable: true})` for `firstName?: string`
 - The `id` field will always be a `PrimaryGeneratedColumn` of UUID type unless you specify otherwise.
 - The `id` field in the interface will always be optional
+- A nullable column is an optional field in the interface (`firstName?: string`); leave `null` out of the type.
 
 ### Database migrations
 
@@ -47,6 +48,8 @@ This backend is built using the smoke-trees ecosystem, specifically leveraging `
 - Use `camelCase` for property names
 - Avoid using `any` at all costs
 - Prioritize typescript inference over explicit type declarations but declare types for variables that are not inferred correctly
+- Keep each type in a single source of truth. A duplicate type turns a one-field change into edits in several places. Derive types from what already exists instead of redeclaring them.
+- For a request body validated by a zod schema, use `z.infer<typeof zodValidator>` as its type.
 
 ## Project Structure
 
@@ -189,6 +192,8 @@ This backend is built using the smoke-trees ecosystem, specifically leveraging `
   },
 })
 ```
+
+- When the route validates its body with a zod schema, document it with `requestBody: zodValidator.toJSONSchema() as any`. This is the one allowed `any`.
 
 ### General Docs
 
