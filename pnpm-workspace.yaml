@@ -1,3 +1,5 @@
 allowBuilds:
   '@scarf/scarf': true
   protobufjs: true
+minimumReleaseAgeExclude:
+  - '@smoke-trees/postgres-backend@5.0.0'

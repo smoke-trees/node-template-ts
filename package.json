@@ -1,6 +1,6 @@
 {
 	"name": "template-ts",
-	"version": "4.1.0",
+	"version": "5.0.0",
 	"description": "TypeScript version of our Node.js template",
 	"main": "dist/index.js",
 	"scripts": {
@@ -33,7 +33,7 @@
 	},
 	"homepage": "https://github.com/smoke-trees/node-template-ts#readme",
 	"dependencies": {
-		"@smoke-trees/postgres-backend": "~4.1.2",
+		"@smoke-trees/postgres-backend": "~5.0.0",
 		"@smoke-trees/smoke-context": "^1.6.0",
 		"@types/express": "^5.0.3",
 		"@types/express-serve-static-core": "^5.0.7",

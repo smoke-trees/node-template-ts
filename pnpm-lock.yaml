@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@smoke-trees/postgres-backend':
-        specifier: ~4.1.2
-        version: 4.1.2(@smoke-trees/smoke-context@1.6.0(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0)))(@types/express-serve-static-core@5.1.3)(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0))(pg@8.23.1)(supports-color@5.5.0)(typeorm@0.3.31(pg@8.23.1)(supports-color@5.5.0))
+        specifier: ~5.0.0
+        version: 5.0.0(@smoke-trees/smoke-context@1.6.0(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0)))(@types/express-serve-static-core@5.1.3)(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0))(pg@8.23.1)(supports-color@5.5.0)(typeorm@0.3.31(pg@8.23.1)(supports-color@5.5.0))
       '@smoke-trees/smoke-context':
         specifier: ^1.6.0
         version: 1.6.0(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0))
@@ -280,15 +280,15 @@ packages:
   '@scarf/scarf@1.4.0':
     resolution: {integrity: sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ==}
 
-  '@smoke-trees/postgres-backend@4.1.2':
-    resolution: {integrity: sha512-FX3r6vPwI2+ON/s9GJN9ZK/B5KPYpRiGQFOXmCbt0P1svLXkQHh6s5AlHPciPgU/XVEr4jrIur21i9gae/0zQA==}
+  '@smoke-trees/postgres-backend@5.0.0':
+    resolution: {integrity: sha512-r8sW/jL7MTSnyGJPzsUXxyXR9aYRwKxF/GS5bgPI5YIJcD7m4vBV0e+14ei5KPdVoG1Je3w63CWO/6jS9uSmeA==}
     peerDependencies:
       '@smoke-trees/smoke-context': '>=1.5.0'
       '@types/express': '*'
       '@types/express-serve-static-core': '*'
       express: '>=5.0.0 <6.0.0'
       pg: '*'
-      typeorm: '>=0.3.20 <1.0.0'
+      typeorm: '>=1.0.0 <2.0.0'
 
   '@smoke-trees/smoke-context@1.6.0':
     resolution: {integrity: sha512-/1H4hQFv2F1VkmW93GDPQM3PY4NDkrv97qik1AMUsrQQPmBqyVptHBl4Mm02ROU5BJbCZmPfQ610o70C1azeqA==}
@@ -2057,7 +2057,7 @@ snapshots:
 
   '@scarf/scarf@1.4.0': {}
 
-  '@smoke-trees/postgres-backend@4.1.2(@smoke-trees/smoke-context@1.6.0(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0)))(@types/express-serve-static-core@5.1.3)(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0))(pg@8.23.1)(supports-color@5.5.0)(typeorm@0.3.31(pg@8.23.1)(supports-color@5.5.0))':
+  '@smoke-trees/postgres-backend@5.0.0(@smoke-trees/smoke-context@1.6.0(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0)))(@types/express-serve-static-core@5.1.3)(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0))(pg@8.23.1)(supports-color@5.5.0)(typeorm@0.3.31(pg@8.23.1)(supports-color@5.5.0))':
     dependencies:
       '@smoke-trees/smoke-context': 1.6.0(@types/express@5.0.6)(express@5.3.0(supports-color@5.5.0))
       '@types/compression': 1.8.1
